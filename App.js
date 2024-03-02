@@ -12,7 +12,7 @@ import Cart from './src/Screens/CartScreen/Cart';
 import AddressList from './src/Screens/AddressListScreen/AddressList';
 import OrderPlaced from './src/Screens/OrderPlacedScreen/OrderPlaced';
 import Orders from './src/Screens/OrdersScreen/Orders';
-
+import Home from './src/Screens/HomeScreen/Home';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -31,6 +31,7 @@ function App() {
     <NativeBaseProvider>
       <Stack.Navigator>
       {/* working on this screen -- temp*/}
+      <Stack.Screen name="Home" component={Home}/>
       {/* <Stack.Screen name="POC" component={ImageRenderPOC}/> */}
       
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>

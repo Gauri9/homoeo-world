@@ -35,16 +35,26 @@ const HomeScreen = () => {
     <ScrollView style={styles.container}>
 
       {/* Search bar */}
-      <AutocompleteSearchBar />
+      <View style={{backgroundColor:'white'}}>
+        <AutocompleteSearchBar />
+      </View>
 
       {/* Upload Prescription block */}
-      <TouchableOpacity style={styles.prescription} activeOpacity={.7} onPress={uploadPrescriptionHandler}>
-        <Text style={styles.prescriptionText}>Upload Prescription</Text>
-        <Image
-                source={require("HomoeoWorld/assets/icons/icons8-upload-64.png")}
-                style={styles.uploadIcon}
-          />
-      </TouchableOpacity>
+      <View style={styles.prescriptionContainer}>
+
+        <View style={styles.prescriptionTextContainer}>
+          <Text style={styles.prescriptionText}>Order with Prescription</Text>
+          <Text style={styles.prescriptionDescText}>Upload a prescription and {'\n'}tell us what you need. {'\n'}We do the rest!</Text>
+        </View>
+        
+        <TouchableOpacity style={styles.prescription} activeOpacity={.7} onPress={uploadPrescriptionHandler}>
+          <Text style={styles.uploadText}>Upload</Text>
+          <Image
+                  source={require("HomoeoWorld/assets/icons/icons8-upload-64.png")}
+                  style={styles.uploadIcon}
+            />
+        </TouchableOpacity>
+      </View>     
 
       {/* Title */}
       <Text style={styles.title}>Homeopathic Product Range</Text>
@@ -63,7 +73,7 @@ const HomeScreen = () => {
       />
 
       {/* Title */}
-      <Text style={styles.title}>Shop By Concern</Text>
+      <Text style={styles.title}>Shop by Concern</Text>
 
         {/* Tags */}
         <FlatList

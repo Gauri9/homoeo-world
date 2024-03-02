@@ -4,7 +4,7 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Input, List, Text, Image } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import * as api from "C:/Users/Gauri/FULL_STACK/HomoeoWorld/src/utils/api.js";
-// import { marginBottom } from "styled-system";
+import {theme} from "C:/Users/Gauri/FULL_STACK/HomoeoWorld/src/utils/theme.js"
 
 const AutocompleteSearchBar = () => {
   const navigation = useNavigation();
@@ -44,15 +44,17 @@ const AutocompleteSearchBar = () => {
       {/* Search Input */}
       <Input
         size="sm"
-        placeholder="Search for the product"
+        placeholder="Search from our medicines"
+        // placeholderTextColor={theme.primaryColor}
         onChangeText={handleSearch}
         value={searchTerm}
         variant="rounded"
+        borderColor= {theme.primaryColor}
         InputLeftElement={
           <Image
             source={require("HomoeoWorld/assets/icons/search-icon.png")}
             style={styles.searchIcon}
-          />
+        />
         }
       />
 
@@ -70,6 +72,7 @@ const AutocompleteSearchBar = () => {
                   padding: 10,
                   borderBottomWidth: 1,
                   borderBottomColor: "#D3D3D3",
+                  // borderBottomColor:theme.primaryColor
                 }}
               >
                 <Text>{item.title}</Text>
@@ -87,6 +90,7 @@ export default AutocompleteSearchBar;
 const styles = StyleSheet.create({
   container: {
     margin: 10,
+    backgroundColor:'white'
   },
   searchList: {
     backgroundColor: "#F5F5F5",

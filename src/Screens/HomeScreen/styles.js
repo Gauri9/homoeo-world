@@ -18,7 +18,7 @@ export default styles = StyleSheet.create({
   title: {
     fontSize:16,
     // fontWeight:'500',
-    marginBottom: 10,
+    // marginBottom: 10,
     marginTop: 20,
     color:'black',
     backgroundColor:'white',
@@ -27,7 +27,12 @@ export default styles = StyleSheet.create({
   categoryItem: {
     flex: 1,
     alignItems: 'center',
-    marginBottom: 20,
+    margin: 3,
+    padding:5,
+    borderColor:'black',
+    borderWidth:0.5,
+    borderRadius: 10,
+    backgroundColor:'white'
   },
   // categoryContainer: {
   //   flexDirection: 'row',

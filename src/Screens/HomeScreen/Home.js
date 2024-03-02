@@ -60,22 +60,26 @@ const HomeScreen = () => {
       <Text style={styles.title}>Homeopathic Product Range</Text>
 
       {/* Categories */}
-      <FlatList
-        data={categories}
-        numColumns={3} // Display categories in 3 columns
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.categoryItem}>
-            <Image source={item.image} style={styles.categoryImage} />
-            <Text style={styles.categoryName}>{item.name}</Text>
-          </View>
-        )}
-      />
+      <View style={{marginHorizontal: 5}}>
+        <FlatList
+          data={categories}
+          numColumns={3} // Display categories in 3 columns
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.categoryItem}>
+              <Image source={item.image} style={styles.categoryImage} />
+              <Text style={styles.categoryName}>{item.name}</Text>
+            </View>
+          )}
+        />
+      </View>
+      
 
       {/* Title */}
       <Text style={styles.title}>Shop by Concern</Text>
 
         {/* Tags */}
+        <View style={{marginHorizontal: 5}}>
         <FlatList
           data={concerns}
           numColumns={3} // Display concerns in 3 columns
@@ -86,7 +90,8 @@ const HomeScreen = () => {
               <Text style={styles.categoryName}>{item.name}</Text>
             </View>
           )}
-        /> 
+        />
+         </View> 
     </ScrollView>
   );
 };

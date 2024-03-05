@@ -15,6 +15,10 @@ const AutocompleteSearchBar = () => {
 
   const handleSearch = async (searchTerm) => {
     console.log(searchTerm)
+    if(searchTerm == ""){
+      setSearchResults([]);
+      return;
+    }
     // setSearchTerm(searchTerm);
     try {
       console.log('searchTerm', searchTerm)

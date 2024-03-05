@@ -10,8 +10,6 @@ import styles from './styles';
 function ProductDetail(){
   console.log('productDetails')
 
-    
-
   const route = useRoute();
   const { product } = route.params;
 

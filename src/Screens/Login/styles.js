@@ -16,7 +16,7 @@ export default styles = StyleSheet.create({
       // marginTop:100,
       fontSize: 30,
       fontWeight: "900",
-      color: 'black'
+      color: theme.primaryColor
     },
     Middle: {
       alignItems: "center",

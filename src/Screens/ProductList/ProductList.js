@@ -12,11 +12,9 @@ import {
   Center,
   Pressable,
 } from "native-base";
-import { FontAwesaome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   useNavigation,
   useRoute,
-  useIsFocused,
 } from "@react-navigation/native";
 import ProductCard from "HomoeoWorld/src/components/ProductCard/ProductCard";
 import AutocompleteSearchBar from "HomoeoWorld/src/components/AutoCompleteSearchBar/AutocompleteSearchBar.js";
@@ -30,7 +28,14 @@ function ProductList() {
   const [selected, setSelected] = React.useState(1);
 
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
+  const route = useRoute();
+
+  console.log('routes', route)
+  let header;
+  if(route.params.header){
+    header = route.params.header;
+    console.log('header', header)  
+  }
 
   const [products, setProducts] = useState([]);
   // const [loading, setLoading] = useState(true);
@@ -41,18 +46,6 @@ function ProductList() {
   const [isLoading, setIsLoading] = useState(false);
 
   const pageSize = 10;
-
-  // useEffect(() => {
-  //   async function fetchCartData() {
-  //     console.log('fetchCartData...')
-  //     const response = await auth.getAuthAndCartData();
-  //     if(response && response.cart){
-  //       setCartItems(response.cart);
-  //       console.log('product list cartItems: ', _cartItems);
-  //     }
-  //   }
-  //     fetchCartData();
-  // },[isFocused])
 
   useEffect(() => {
     async function fetchData() {
@@ -79,6 +72,12 @@ function ProductList() {
     if (hasMore) {
       fetchData();
     }
+    
+    // setting dynamic name of the screen based on the category selected
+    navigation.setOptions({
+      title: header,
+      headerTitleStyle: { fontWeight: '900', color: theme.primaryColor }
+    });
 
     // console.log(products)
   }, [page, hasMore]);

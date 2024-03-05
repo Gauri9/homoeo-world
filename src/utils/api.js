@@ -2,8 +2,8 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // const apiBaseUrl = Config.API_BASE_URL;
-const apiBaseUrl = 'https://medical-app-5gdu.onrender.com'
-// const apiBaseUrl = 'http://192.168.1.104:5000'
+// const apiBaseUrl = 'https://medical-app-5gdu.onrender.com'
+const apiBaseUrl = 'http://192.168.1.104:5000'
 
 export const postCredentials = async (creds) => await axios.post(`${apiBaseUrl}/login`,creds);  //on signup page
 export const validateCredentials = async (creds) => await axios.post(`${apiBaseUrl}/login/validate`, creds); //login page for authentication
@@ -25,7 +25,15 @@ export const getProductByTitle = async (title) => await axios.get(`${apiBaseUrl}
         title: title
     }
 });
-
+export const fetchMedicineNames = async (category) => {
+    console.log('helloe inside api.js')
+    const response = await axios.get(`${apiBaseUrl}/medicine/getmedicinenames`,{
+        params:{
+            category:category
+        }
+    })
+    return response
+} 
 //address
 export const postNewAddress = async (newAddress) => {
     console.log('postNewAddress...')

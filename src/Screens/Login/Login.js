@@ -67,7 +67,8 @@ function Login() {
 
       if (token != null) {
         await AsyncStorage.setItem("authToken", JSON.stringify(token));
-        navigation.navigate("Product List");
+        // navigation.navigate("Product List");
+        navigation.navigate("Home")
         setIsLoggingIn(false);
         console.log("Authentication is successful");
       } else console.log("token is null");

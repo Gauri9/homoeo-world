@@ -3,7 +3,9 @@ import { View, Text, TextInput, StyleSheet, FlatList, Image, ScrollView, Touchab
 import {NativeBaseProvider} from 'native-base';
 import AutocompleteSearchBar from "HomoeoWorld/src/components/AutoCompleteSearchBar/AutocompleteSearchBar.js";
 import styles from './styles';
-
+import {
+  useNavigation,
+} from "@react-navigation/native";
 
 const HomeScreen = () => {
   // Dummy data for categories
@@ -27,8 +29,20 @@ const HomeScreen = () => {
     // Add more categories as needed
   ];
 
+  const navigation = useNavigation();
+
   uploadPrescriptionHandler = () => {
     console.log('upload prescription pressed...')
+  }
+
+  onCategoryPress = (item) => {
+    console.log('on category press...', item)
+    navigation.navigate("Medicine Names",{header:item.name})
+  }
+
+  onTagPress = (item) => {
+    console.log('on tag press...', item)
+    navigation.navigate("Medicine Names",{header: item.name})
   }
 
   return (
@@ -41,23 +55,22 @@ const HomeScreen = () => {
 
       {/* Upload Prescription block */}
       <View style={styles.prescriptionContainer}>
-
         <View style={styles.prescriptionTextContainer}>
           <Text style={styles.prescriptionText}>Order with Prescription</Text>
           <Text style={styles.prescriptionDescText}>Upload a prescription and {'\n'}tell us what you need. {'\n'}We do the rest!</Text>
         </View>
         
-        <TouchableOpacity style={styles.prescription} activeOpacity={.7} onPress={uploadPrescriptionHandler}>
+        <TouchableOpacity style={styles.uploadContainer} activeOpacity={.7} onPress={uploadPrescriptionHandler}>
           <Text style={styles.uploadText}>Upload</Text>
           <Image
-                  source={require("HomoeoWorld/assets/icons/icons8-upload-64.png")}
-                  style={styles.uploadIcon}
+              source={require("HomoeoWorld/assets/icons/icons8-upload-24.png")}
+              style={styles.uploadIcon}
             />
         </TouchableOpacity>
       </View>     
 
       {/* Title */}
-      <Text style={styles.title}>Homeopathic Product Range</Text>
+      <Text style={styles.title}>Homoeopathic Product Range</Text>
 
       {/* Categories */}
       <View style={{marginHorizontal: 5}}>
@@ -66,10 +79,10 @@ const HomeScreen = () => {
           numColumns={3} // Display categories in 3 columns
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.categoryItem}>
+            <TouchableOpacity style={styles.categoryItem} onPress={() => onCategoryPress(item)}>
               <Image source={item.image} style={styles.categoryImage} />
               <Text style={styles.categoryName}>{item.name}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       </View>
@@ -85,10 +98,10 @@ const HomeScreen = () => {
           numColumns={3} // Display concerns in 3 columns
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.categoryItem}>
+            <TouchableOpacity style={styles.categoryItem} onPress={() => onTagPress(item)}>
               <Image source={item.image} style={styles.categoryImage} />
               <Text style={styles.categoryName}>{item.name}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
          </View> 

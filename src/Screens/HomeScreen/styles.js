@@ -29,6 +29,7 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     margin: 3,
     padding:5,
+    // borderColor:theme.primaryColor,
     borderColor:'black',
     borderWidth:0.5,
     borderRadius: 10,
@@ -68,7 +69,7 @@ export default styles = StyleSheet.create({
     padding:20,
     marginTop:10
   },
-  prescription:{
+  uploadContainer:{
     borderRadius: 10,
     borderColor: theme.primaryColor,
     borderWidth: 1, 

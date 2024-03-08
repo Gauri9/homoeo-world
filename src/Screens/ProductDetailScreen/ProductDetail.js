@@ -7,16 +7,18 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 // import styles from './styles';
 import { theme } from '../../utils/theme';
 import * as api from 'C:/Users/Gauri/FULL_STACK/HomoeoWorld/src/utils/api.js'
-
+import { useCart } from "../../Context/CartContext";
 
 
 const ProductDetail = () => {
-    const [medicineDetail, setMedicineDetail] = useState(null)
-    const [selectedPackage, setSelectedPackage] = useState();
-    const [selectedSize, setSelectedSize] = useState();
-    const [selectedSubcategory, setSelectedSubcategory] = useState();
+  const [medicineDetail, setMedicineDetail] = useState(null)
+  const [selectedPackage, setSelectedPackage] = useState();
+  const [selectedSize, setSelectedSize] = useState();
+  const [selectedSubcategory, setSelectedSubcategory] = useState();
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [quantity, setQuantity] = useState(0);
 
-    const [addedToCart, setAddedToCart] = useState(false);
+  const {addToCart, incrementQuantity, decrementQuantity, cart} = useCart();
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -37,6 +39,15 @@ const ProductDetail = () => {
     fetchData();
 
   },[])
+
+  useEffect(()=>{
+    if(medicineDetail!=null){
+      const cartData = cart.filter(item => item._id === medicineDetail._id)
+      console.log('cartData', cartData)
+      if(cartData[0])
+      setQuantity(cartData[0].quantity)
+    }
+  },[cart, medicineDetail])
 
 
   useEffect(() => {
@@ -67,11 +78,13 @@ const ProductDetail = () => {
   }
 
   const handleAddToCartPress = () => {
-    console.log('inside handleAddToCartPress...')
-    setAddedToCart(true)
+    console.log('inside handleAddToCartPress...');
+    setAddedToCart(true);
+    const newMedicineDetail = {...medicineDetail}
+    delete newMedicineDetail.subcategories
+    addToCart(newMedicineDetail,1);
   }
 
- 
 
   const imageUrl = 'https://drive.google.com/file/d/1aj7EOEAgTEG6MpnzDjDWW3Vrd4GJDR8m/view?usp=sharing'
   const file_id = imageUrl.split('/d/')[1].split('/')[0]
@@ -140,10 +153,22 @@ const ProductDetail = () => {
         </Button>
 
         {addedToCart ? (
-          <Button style={styles.addtoCart}>
-            <Text style={{ color: "white" }}>Added to Cart</Text>
-          </Button>
-        ) : (
+            <View style={styles.cartItem}>
+              <View style={styles.quantityContainer}>
+                <TouchableOpacity onPress={() => decrementQuantity(medicineDetail._id)} style={styles.quantityButton}>
+                  <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+
+                <View style={styles.quantityDisplay}>
+                  <Text style={styles.quantityText}>{quantity}</Text>
+                </View>
+
+                <TouchableOpacity onPress={() => incrementQuantity(medicineDetail._id)} style={styles.quantityButton}>
+                  <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
           <Button onPress={handleAddToCartPress} style={styles.addtoCart}>
             <Text style={{ color: "white" }}>Add to Cart</Text>
           </Button>
@@ -260,6 +285,45 @@ const styles = StyleSheet.create({
     height: 1, // Specify the height of the line
     backgroundColor: "lightgrey", // Specify the line color
     marginBottom: 8, // Adjust the margin as needed
+  },
+  cartItem: {
+    backgroundColor: "white",
+    // padding: 10,
+    // borderRadius: 5,
+
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: theme.primaryColor,
+  },
+  quantityButton: {
+    width: 30,
+    height: 30,
+    backgroundColor: theme.primaryColor,
+    justifyContent: "center",
+    alignItems: "center",
+    // borderRadius: 5,
+    // marginHorizontal: 5,
+  },
+  quantityDisplay: {
+    width: 30,
+    height: 30,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    // borderRadius: 5,
+  },
+  quantityText: {
+    fontSize: 14,
+    color:'black'
+  },
+  buttonText: {
+    fontSize: 14,
+    color: "white",
   },
 });
 

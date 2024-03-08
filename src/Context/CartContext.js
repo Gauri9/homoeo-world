@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CartContext = createContext();
 
@@ -9,28 +10,69 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    // Load cart data from AsyncStorage when the component mounts
+    const loadCartData = async () => {
+      try {
+        const savedCart = await AsyncStorage.getItem('cart');
+        if (savedCart !== null) {
+          setCart(JSON.parse(savedCart));
+          console.log(cart)
+        }
+      } catch (error) {
+        console.error('Error loading cart data:', error);
+      }
+    };
+
+    loadCartData();
+  }, []); 
+
+  const updateCartData = async (newCart) => {
+      console.log('updatedCart', newCart)
+    try {
+      await AsyncStorage.setItem('cart', JSON.stringify(newCart));
+    } catch (error) {
+      console.error('Error saving cart data:', error);
+    }
+  };
+
+
   const addToCart = (product, quantity = 1) => {
-    console.log('inside addToCart...', product)
-    const existingItem = cart.find(item => item.id === product._id);
-    if (!existingItem) {
-     // If the product is not already in the cart, add it
-     const newItem = { ...product, quantity };
-     setCart([...cart, newItem]);
-    } 
+      console.log('addToCart...'), product
+    const existingItem = cart.find(item => item._id === product._id);
+  if (existingItem) {
+    // If the product already exists in the cart, update its quantity
+    const updatedItem = { ...existingItem, quantity: existingItem.quantity + quantity };
+    const updatedCart = cart.map(item => (item._id === product._id ? updatedItem : item));
+      setCart(updatedCart);
+      updateCartData(updatedCart);
+  } else {
+    // If the product is not already in the cart, add it
+    const newItem = { ...product, quantity };
+    const updatedCart = [...cart, newItem]
+    setCart(updatedCart);
+    updateCartData(updatedCart);
+
+  }
+
   };
 
   const removeFromCart = (productId) => {
     console.log('inside removeFromCart...', productId)
-    setCart(cart.filter(item => item.id !== productId));
+    const updatedCart = cart.filter(item => item._id !== productId)
+    setCart(updatedCart);
+    updateCartData(updatedCart);
   };
 
   const incrementQuantity = (productId) => {
     console.log('inside incrementQuantity...', productId)
-    const existingItem = cart.find(item => item.id === productId);
+    const existingItem = cart.find(item => item._id === productId);
     if (existingItem) {
       // If the product already exists in the cart, update its quantity
       const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
-      setCart(cart.map(item => (item.id === productId ? updatedItem : item)));
+      const updatedCart = cart.map(item => (item._id === productId ? updatedItem : item))
+      setCart(updatedCart);
+      updateCartData(updatedCart)
     } 
     else{
         console.log("product does not exist")
@@ -39,11 +81,13 @@ export const CartProvider = ({ children }) => {
 
   const decrementQuantity = (productId) => {
     console.log('inside decrementQuantity...', productId)
-    const existingItem = cart.find(item => item.id === productId);
+    const existingItem = cart.find(item => item._id === productId);
     if (existingItem) {
       // If the product already exists in the cart, update its quantity
       const updatedItem = { ...existingItem, quantity: existingItem.quantity - 1 };
-      setCart(cart.map(item => (item.id === productId ? updatedItem : item)));
+      const updatedCart = cart.map(item => (item._id === productId ? updatedItem : item))
+      setCart(updatedCart);
+      updateCartData(updatedCart)
     } 
     else{
         console.log("product does not exist")

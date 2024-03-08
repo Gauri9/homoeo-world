@@ -6,13 +6,16 @@ import * as auth from "HomoeoWorld/src/utils/auth.js";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { borderLeft, flex, marginBottom } from "styled-system";
 import { theme } from "HomoeoWorld/src/utils/theme.js";
+import { useCart } from "../../Context/CartContext";
 import styles from "./styles";
 
 function Cart() {
   const navigation = useNavigation();
+  const {cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity} = useCart()
+  console.log('cart...', cart)
 
   const route = useRoute();
-  console.log("route: ", route);
+  // console.log("route: ", route);
 
   const [cartItems, setCartItems] = useState([]);
   const [authToken, setAuthToken] = useState("");
@@ -65,65 +68,13 @@ function Cart() {
      navigation.navigate('Product List');
   }
 
-  const removeItemfromCart = async (index) => {
+  const removeItemfromCart = async (productId) => {
     console.log("removeItemfromCart...");
 
-    const indexToRemove = index;
-
-    if (indexToRemove >= 0 && indexToRemove < cartItems.length) {
-      setCartItems((prevCartItems) => {
-        // Create a copy of the previous cartItems to make modifications
-        const newCartItems = [...prevCartItems];
-        newCartItems.splice(indexToRemove, 1);
-        return newCartItems;
-      });
-      console.log("cartItems: ", cartItems);
-      // const response = await auth.storeAuthAndCartData(authToken, cartItems);
-      // console.log('storeAuthAndCartData Respone: ', response);
-    } else {
-      console.error("invalid index to remove:", indexToRemove);
-    }
+    removeFromCart(productId)
   };
 
-  const incrementQuantity = async (index) => {
-    console.log("increment quantity...");
 
-    try {
-      // const response = await auth.getAuthAndCartData();
-      // console.log(response);
-
-      setCartItems((prevCartItems) => {
-        const newCartItems = [...prevCartItems];
-        newCartItems[index].quantity += 1;
-        return newCartItems;
-      });
-    } catch (error) {
-      console.error("Error while incrementing: ", error);
-    }
-  };
-
-  const decrementQuantity = async (index) => {
-    console.log("decrement quantity...");
-
-    try {
-      // const response = await auth.getAuthAndCartData();
-      // console.log(response);
-
-      if (cartItems[index].quantity === 1) {
-        await removeItemfromCart(index);
-        return;
-      }
-
-      setCartItems((prevCartItems) => {
-        // Create a copy of the previous cartItems to make modifications
-        const newCartItems = [...prevCartItems];
-        newCartItems[index].quantity -= 1;
-        return newCartItems; // Return the new state
-      });
-    } catch (error) {
-      console.error("Error while decrementing: ", error);
-    }
-  };
 
   const onSelectAddressPress = async () => {
     console.log("onSelectAddressPress...");
@@ -153,12 +104,12 @@ function Cart() {
       <View style={styles.cartItem} key={index}>
         <View style={styles.cartItemInfo}>
           <Text style={styles.itemName}>{item.title}</Text>
-          <Text style={styles.itemPrice}>{item.price}</Text>
+          {/* <Text style={styles.itemPrice}>{item.MRP}</Text> */}
         </View>
 
         <View style={styles.quantityContainer}>
           <TouchableOpacity
-            onPress={() => decrementQuantity(index)}
+            onPress={() => decrementQuantity(item._id)}
             style={styles.quantityButton}
           >
             <Text style={styles.quantityButtonText}>-</Text>
@@ -167,7 +118,7 @@ function Cart() {
           <Text style={styles.quantity}>{item.quantity}</Text>
 
           <TouchableOpacity
-            onPress={() => incrementQuantity(index)}
+            onPress={() => incrementQuantity(item._id)}
             style={styles.quantityButton}
           >
             <Text style={styles.quantityButtonText}>+</Text>
@@ -175,7 +126,7 @@ function Cart() {
         </View>
       </View>
       <View style={styles.removeButtonContainer}>
-        <TouchableOpacity onPress={() => removeItemfromCart(index)} style={styles.removeButton}>
+        <TouchableOpacity onPress={() => removeItemfromCart(item._id)} style={styles.removeButton}>
            <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon}/>
             <Text style={{ color: theme.primaryColor }}>Remove</Text>
         </TouchableOpacity>
@@ -203,9 +154,9 @@ function Cart() {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.cartList}>
-        {cartItems.length !== 0 && (
+        {cart.length !== 0 && (
           <>
-            {cartItems.map((item, index) => renderCartItem(item, index))}
+            {cart.map((item, index) => renderCartItem(item, index))}
             {isAddressSelected && (
               <View style={{marginVertical: 15}}>
                 <View

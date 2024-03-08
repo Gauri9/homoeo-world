@@ -41,6 +41,7 @@ export default styles = StyleSheet.create({
     addressText: {
       fontSize: 12, 
       flex: 1, 
+      color:'black'
     },
     selectedAddressText:{
       fontSize: 12, 

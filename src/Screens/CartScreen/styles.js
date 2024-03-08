@@ -37,12 +37,14 @@ export default styles = StyleSheet.create({
     itemName: {
       fontSize: 14,
       marginBottom: 6,
-        fontWeight: 'bold',
+      fontWeight: 'bold',
+      color:'black'
     },
     itemPrice: {
       fontSize: 16,
       color: "black",
       fontWeight: "bold",
+      color:'black'
     },
     quantityContainer: {
       flexDirection: "row",
@@ -66,6 +68,7 @@ export default styles = StyleSheet.create({
     quantity: {
       fontSize: 20,
       marginHorizontal: 16,
+      color:'black'
     },
     totalContainer: {
       flexDirection: "row",
@@ -141,6 +144,7 @@ export default styles = StyleSheet.create({
       fontWeight: "bold",
       color: "grey",
       marginBottom: 8,
+      color:'black'
     },
     changeButton: {
       flex: 1,

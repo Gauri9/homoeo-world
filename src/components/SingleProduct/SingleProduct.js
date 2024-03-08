@@ -66,7 +66,7 @@ const SingleProduct = ({ product }) => {
 
 
   // temperoroy
-  const imageUrl = 'https://drive.google.com/file/d/1H2XlWKkhx8AfWJsYzP0E46eBWJRKMvrW/view'
+  const imageUrl = 'https://drive.google.com/file/d/1aj7EOEAgTEG6MpnzDjDWW3Vrd4GJDR8m/view?usp=sharing'
   const file_id = imageUrl.split('/d/')[1].split('/')[0]
   console.log(file_id)
   const directImageLink = `https://drive.google.com/uc?export=view&id=${file_id}`
@@ -85,9 +85,9 @@ const SingleProduct = ({ product }) => {
       {/* <View style={styles.line} /> */}
 
       <FlatList
-        horizontal={true} // Set horizontal scrolling
-        showsHorizontalScrollIndicator={false} // Hide scroll indicator (optional)
-        data={directImageLinks} // Replace with array of image URLs
+        horizontal={true} 
+        showsHorizontalScrollIndicator={false} 
+        data={directImageLinks} 
         renderItem={({ item }) => (
           <View style={styles.imageContainer}> 
             <Image source={{ uri: item }} style={styles.productImage} />
@@ -95,11 +95,10 @@ const SingleProduct = ({ product }) => {
         )}
       />
 
-
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Text style={styles.productPrice}>{product.price}</Text>
         <Text style={styles.productMRP}>MRP 29.85</Text>
-      </View>
+      </View> */}
 
       <View
         style={{ flexDirection: "row", justifyContent: "center", padding: 20 }}

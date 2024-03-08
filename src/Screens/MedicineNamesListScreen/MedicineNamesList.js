@@ -52,17 +52,20 @@ function MedicineNamesList(){
         });
     },[])
 
+    onMedicineNamePress = (medicineName) => {
+        console.log('inside onMedicineNamePress...', medicineName)
+        navigation.navigate("Product Details", {medicineName})
+    }
     
-
     return(
         <View style={styles.container}>
             <FlatList
                 data={namesData}
                 numColumns={1}
-                keyExtractor={(item)=> item.id}
+                keyExtractor={(item)=> item._id}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => onMedicineNamePress(item.title)}>
                         <Text style={styles.medicineName}>{item.title}</Text>
                         <View style={styles.seperator}></View>
                     </TouchableOpacity>

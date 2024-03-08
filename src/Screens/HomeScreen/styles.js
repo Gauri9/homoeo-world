@@ -19,7 +19,7 @@ export default styles = StyleSheet.create({
     fontSize:16,
     // fontWeight:'500',
     // marginBottom: 10,
-    marginTop: 20,
+    marginTop: 10,
     color:'black',
     backgroundColor:'white',
     padding: 10,
@@ -30,7 +30,7 @@ export default styles = StyleSheet.create({
     margin: 3,
     padding:5,
     // borderColor:theme.primaryColor,
-    borderColor:'black',
+    borderColor:'grey',
     borderWidth:0.5,
     borderRadius: 10,
     backgroundColor:'white'
@@ -73,10 +73,10 @@ export default styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: theme.primaryColor,
     borderWidth: 1, 
-    padding: 10,
+    paddingHorizontal: 10,
     flexDirection:'row',
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
   },
   uploadText:{
     color: theme.primaryColor,

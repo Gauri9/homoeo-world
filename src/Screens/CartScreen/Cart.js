@@ -222,7 +222,7 @@ function Cart() {
                   </TouchableOpacity>
                 </View>
                 <Box shadow={1} style={styles.addressCard}>
-                  <Text style={{ flex: 1 }}>{selectedAddress}</Text>
+                  <Text style={{ flex: 1, color:'black' }}>{selectedAddress}</Text>
                 </Box>
               </View>
             )}
@@ -247,7 +247,7 @@ function Cart() {
 
               <View style={styles.detailRow}>
               <Text style={[styles.orderTotalText, { color: 'black' }]}>Order Total:</Text>
-                <Text style={[styles.orderTotal, {color:'black'}]}>{cartTotal - medicineDiscount - couponDiscount}</Text>
+                <Text style={[styles.orderTotal, {color:'green'}]}>{cartTotal - medicineDiscount - couponDiscount}</Text>
               </View>
             </Card>
           </>

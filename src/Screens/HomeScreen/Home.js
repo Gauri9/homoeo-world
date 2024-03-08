@@ -73,7 +73,7 @@ const HomeScreen = () => {
       <Text style={styles.title}>Homoeopathic Product Range</Text>
 
       {/* Categories */}
-      <View style={{marginHorizontal: 5}}>
+      <View style={{marginHorizontal: 5, backgroundColor:'white',paddingBottom: 20}}>
         <FlatList
           data={categories}
           numColumns={3} // Display categories in 3 columns
@@ -92,7 +92,7 @@ const HomeScreen = () => {
       <Text style={styles.title}>Shop by Concern</Text>
 
         {/* Tags */}
-        <View style={{marginHorizontal: 5}}>
+        <View style={{marginHorizontal: 5, backgroundColor:'white', paddingBottom: 20}}>
         <FlatList
           data={concerns}
           numColumns={3} // Display concerns in 3 columns

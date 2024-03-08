@@ -26,14 +26,25 @@ export const getProductByTitle = async (title) => await axios.get(`${apiBaseUrl}
     }
 });
 export const fetchMedicineNames = async (category) => {
-    console.log('helloe inside api.js')
+    console.log('inside fetchMedicineNames api.js')
     const response = await axios.get(`${apiBaseUrl}/medicine/getmedicinenames`,{
         params:{
             category:category
         }
     })
     return response
-} 
+}
+export const fetchMedicineDetail = async (title) => {
+    console.log('fetchMedicineDetail', title)
+    const response = await axios.get(`${apiBaseUrl}/medicine/getmedicinedetails`,{
+        params:{
+            title: title,
+            // company: company
+        }
+    })
+    return response.data;
+}
+
 //address
 export const postNewAddress = async (newAddress) => {
     console.log('postNewAddress...')

@@ -141,7 +141,6 @@ const ProductCard = ({ product }) => {
   };
 
 
-
   return (
     <Box shadow={0} style={styles.boxContainer}>
       <View style={{ marginHorizontal: 10 }}>
@@ -286,6 +285,7 @@ export const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: 14,
+    color:'black'
   },
   buttonText: {
     fontSize: 14,

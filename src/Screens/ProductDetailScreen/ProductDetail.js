@@ -4,7 +4,7 @@ import {NativeBaseProvider, Button } from 'native-base';
 import SingleProduct from '../../components/SingleProduct/SingleProduct';
 import Footer from '../../components/Footer/Footer';
 import { useNavigation, useRoute } from '@react-navigation/native';
-// import styles from './styles';
+import styles from './styles';
 import { theme } from '../../utils/theme';
 import * as api from 'C:/Users/Gauri/FULL_STACK/HomoeoWorld/src/utils/api.js'
 import { useCart } from "../../Context/CartContext";
@@ -17,6 +17,7 @@ const ProductDetail = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState();
   const [addedToCart, setAddedToCart] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [uniquePackages, setUniquePackages] = useState();
 
   const {addToCart, incrementQuantity, decrementQuantity, cart} = useCart();
 
@@ -59,17 +60,34 @@ const ProductDetail = () => {
         subcategory.Package === selectedPackage && subcategory.Size === selectedSize
       );
       setSelectedSubcategory(selectedSubcategory)
+
+      setUniquePackages(new Set(medicineDetail.subcategories.map(subcategory => subcategory.Package)));
     }
     
-  },[selectedPackage, selectedSize, medicineDetail])
+  },[medicineDetail])
+
+  useEffect(() => {
+
+    updateSelectedSubcategory = () => {
+      const selectedSubcategory = medicineDetail.subcategories.find(subcategory => 
+        subcategory.Package === selectedPackage && subcategory.Size === selectedSize
+      );
+      setSelectedSubcategory(selectedSubcategory)
+    }
+
+    if(medicineDetail)
+      updateSelectedSubcategory();
+    
+  },[selectedPackage, selectedSize])
 
 
   const handlePackageChange = (packageName) => {
     setSelectedPackage(packageName);
   };
 
-  const handleSizeChange = (sizeName) => {
-    setSelectedSize(sizeName);
+  const handleSizeChange = (size) => {
+    setSelectedSize(size);
+    console.log('size', size)
   };
 
   const handleBuyPress = () => {
@@ -97,50 +115,59 @@ const ProductDetail = () => {
     {!medicineDetail && <Text>Loading...</Text>}
     {medicineDetail!=null && 
     <ScrollView style={styles.container}>
+
        <View style={styles.detailsContainer}>
         <Text style={styles.title}>{medicineDetail.title}</Text>
         <Text style={styles.company}>{medicineDetail.company}</Text>
-      <FlatList
-        horizontal={true} // Set horizontal scrolling
-        showsHorizontalScrollIndicator={false} // Hide scroll indicator (optional)
-        data={directImageLinks} // Replace with array of image URLs
-        renderItem={({ item }) => (
-          <View style={styles.imageContainer}> 
-            <Image source={{ uri: item }} style={styles.productImage} />
-          </View>
-        )}
-      />
+        <FlatList
+          horizontal={true} // Set horizontal scrolling
+          showsHorizontalScrollIndicator={false} // Hide scroll indicator (optional)
+          data={directImageLinks} //  array of image URLs
+          renderItem={({ item }) => (
+            <View style={styles.imageContainer}> 
+              <Image source={{ uri: item }} style={styles.productImage} />
+            </View>
+          )}
+        />
      
         
         {/* Package Section */}
+        {uniquePackages && 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Package:</Text>
-          {medicineDetail.subcategories.map((subcategory, index) => (
-            <TouchableOpacity key={index} onPress={() => handlePackageChange(subcategory.Package)}>
-              <Text style={[styles.package, {fontWeight: selectedPackage === subcategory.Package ? 'bold' : 'normal'}]}>
-                {subcategory.Package}
+        <Text style={styles.sectionTitle}>Package:</Text>
+        <View style={{flexDirection:'row'}}>
+          {Array.from(uniquePackages).map((package_, index) => (
+            <TouchableOpacity key={index} onPress={() => handlePackageChange(package_)} style={[styles.sectionButton, selectedPackage == package_ ? {backgroundColor:theme.primaryColor, opacity:0.5} : null]}>
+              <Text style={styles.package}>
+                {package_}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
+      </View>}
+        
 
         {/* Size Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Size:</Text>
-          {medicineDetail.subcategories.map((subcategory, index) => (
-            <TouchableOpacity key={index} onPress={() => handleSizeChange(subcategory.Size)}>
-              <Text style={[styles.size, {fontWeight: selectedSize === subcategory.Size ? 'bold' : 'normal'}]}>
-                {subcategory.Size}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          <View style={{flexDirection:'row'}}>
+            {medicineDetail.subcategories.map((subcategory, index) => (
+              <TouchableOpacity key={index} onPress={() => handleSizeChange(subcategory.Size)} style={[styles.sectionButton, selectedSize==subcategory.Size ? {backgroundColor:theme.primaryColor, opacity:0.5} : null]}>
+                <Text style={styles.size}>
+                  {subcategory.Size}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+       
         </View>
 
         {/* Price Section */}
         {selectedSubcategory!=null && 
         <View style={styles.priceContainer}>
+          <Text style={styles.discountedPrice}>₹{selectedSubcategory.MRP - selectedSubcategory.MRP*selectedSubcategory['Discounted Percentage']*0.01}</Text>
           <Text style={styles.mrp}>MRP: ₹{selectedSubcategory.MRP}</Text>
-          <Text style={styles.discount}>Discount: {selectedSubcategory['Discounted Percentage']}%</Text>
+          <Text style={styles.discount}> {selectedSubcategory['Discounted Percentage']}% off</Text>
         </View>
       }
         
@@ -180,162 +207,15 @@ const ProductDetail = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-  },
-  detailsContainer: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color:'black'
-  },
-  company: {
-    fontSize: 16,
-    marginTop: 5,
-    color:'black'
-  },
-  category: {
-    fontSize: 16,
-    marginTop: 5,
-    color:'black'
-  },
-  tags: {
-    fontSize: 14,
-    fontStyle: 'italic',
-    marginTop: 5,
-  },
-  section: {
-    marginTop: 10,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black'
-  },
-  package: {
-    fontSize: 16,
-    marginTop: 5,
-    color:'black'
-  },
-  size: {
-    fontSize: 16,
-    marginTop: 5,
-    color:'black'
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  mrp: {
-    fontSize: 16,
-    marginRight: 10,
-    color:'black'
-  },
-  discount: {
-    fontSize: 16,
-    color: 'green',
-  },
-  imageContainer: {
-    margin: 5, 
-    width: 300, 
-    height: 300, 
-    borderRadius: 10, 
-    overflow: 'hidden', 
-  },
-  productImage: {
-    width: "99%",
-    height: 300,
-    resizeMode: "cover",
-    marginRight: 16,
-    //   borderWidth: 1,
-    //   borderColor: '#ccc',
-  },
-  buyNow: {
-    width: 100,
-    height: 40,
-    backgroundColor: "white",
-    borderColor: theme.primaryColor,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginRight: 5,
-  },
-  addtoCart: {
-    width: 150,
-    height: 40,
-    backgroundColor: theme.primaryColor,
-    borderColor: theme.primaryColor,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginRight: 5,
-  },
-  line: {
-    width: "100%",
-    height: 1, // Specify the height of the line
-    backgroundColor: "lightgrey", // Specify the line color
-    marginBottom: 8, // Adjust the margin as needed
-  },
-  cartItem: {
-    backgroundColor: "white",
-    // padding: 10,
-    // borderRadius: 5,
-
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: theme.primaryColor,
-  },
-  quantityButton: {
-    width: 30,
-    height: 30,
-    backgroundColor: theme.primaryColor,
-    justifyContent: "center",
-    alignItems: "center",
-    // borderRadius: 5,
-    // marginHorizontal: 5,
-  },
-  quantityDisplay: {
-    width: 30,
-    height: 30,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    // borderRadius: 5,
-  },
-  quantityText: {
-    fontSize: 14,
-    color:'black'
-  },
-  buttonText: {
-    fontSize: 14,
-    color: "white",
-  },
-});
 
 
 
+  // function ProductDetail(){
 
-// function ProductDetail(){
+  //   const [medicineDetail, setMedicineDetail] = useState({})
 
-//   const [medicineDetail, setMedicineDetail] = useState({})
-
-//   const route = useRoute();
-//   const { medicineName } = route.params;
+  //   const route = useRoute();
+  //   const { medicineName } = route.params;
 
 //   console.log(route.params);
 //   console.log('medicineName.....');

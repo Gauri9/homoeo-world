@@ -4,8 +4,8 @@ import {theme} from "HomoeoWorld/src/utils/theme.js"
 export default styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 20,
-    marginBottom: 25
+    paddingBottom: 20,
+    // marginBottom: 25
   },
   searchBar: {
     height: 40,

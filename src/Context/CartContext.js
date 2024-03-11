@@ -28,7 +28,6 @@ export const CartProvider = ({ children }) => {
   }, []); 
 
   const updateCartData = async (newCart) => {
-      console.log('updatedCart', newCart)
     try {
       await AsyncStorage.setItem('cart', JSON.stringify(newCart));
     } catch (error) {
@@ -37,23 +36,18 @@ export const CartProvider = ({ children }) => {
   };
 
 
-  const addToCart = (product, quantity = 1) => {
-      console.log('addToCart...'), product
+  const addToCart = (product, selectedSubcategory) => {
+    console.log('selectedSubcategory...', selectedSubcategory)
     const existingItem = cart.find(item => item._id === product._id);
-  if (existingItem) {
-    // If the product already exists in the cart, update its quantity
-    const updatedItem = { ...existingItem, quantity: existingItem.quantity + quantity };
-    const updatedCart = cart.map(item => (item._id === product._id ? updatedItem : item));
-      setCart(updatedCart);
-      updateCartData(updatedCart);
-  } else {
-    // If the product is not already in the cart, add it
-    const newItem = { ...product, quantity };
-    const updatedCart = [...cart, newItem]
-    setCart(updatedCart);
-    updateCartData(updatedCart);
-
-  }
+    const newItem = (existingItem) ? { ...existingItem } : { ...product }
+      
+      if(newItem.subcategories){
+        const newSubcategories = newItem.subcategories.map(subcat => (subcat == selectedSubcategory)? {...subcat, quantity:1} : {...subcat, quantity: subcat.quantity || 0})
+        const updatedItem = {...newItem, subcategories: newSubcategories}
+        const updatedCart =   (existingItem) ? cart.map(item => (item._id === product._id ? updatedItem : item)) : [...cart, updatedItem]
+        setCart(updatedCart);
+        updateCartData(updatedCart);
+      }
 
   };
 
@@ -64,30 +58,34 @@ export const CartProvider = ({ children }) => {
     updateCartData(updatedCart);
   };
 
-  const incrementQuantity = (productId) => {
-    console.log('inside incrementQuantity...', productId)
-    const existingItem = cart.find(item => item._id === productId);
+  const incrementQuantity = (product, selectedSubcategory) => {
+    const existingItem = cart.find(item => item._id === product._id);
+    const newItem = { ...product };
     if (existingItem) {
-      // If the product already exists in the cart, update its quantity
-      const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
-      const updatedCart = cart.map(item => (item._id === productId ? updatedItem : item))
-      setCart(updatedCart);
-      updateCartData(updatedCart)
+      if(product.subcategories){
+        const newSubcategories = product.subcategories.map(subcat => (subcat === selectedSubcategory)? {...subcat, quantity:selectedSubcategory.quantity+1} : {...subcat})
+        const updatedItem = {...newItem, subcategories: newSubcategories}
+        const updatedCart = cart.map(item => (item._id === product._id ? updatedItem : item))
+        setCart(updatedCart);
+        updateCartData(updatedCart);
+      }
     } 
     else{
         console.log("product does not exist")
     }
   }
 
-  const decrementQuantity = (productId) => {
-    console.log('inside decrementQuantity...', productId)
-    const existingItem = cart.find(item => item._id === productId);
+  const decrementQuantity = (product, selectedSubcategory) => {
+    const existingItem = cart.find(item => item._id === product._id);
+    const newItem = { ...product };
     if (existingItem) {
-      // If the product already exists in the cart, update its quantity
-      const updatedItem = { ...existingItem, quantity: existingItem.quantity - 1 };
-      const updatedCart = cart.map(item => (item._id === productId ? updatedItem : item))
-      setCart(updatedCart);
-      updateCartData(updatedCart)
+      if(product.subcategories){
+        const newSubcategories = product.subcategories.map(subcat => (subcat === selectedSubcategory)? {...subcat, quantity:selectedSubcategory.quantity-1} : {...subcat})
+        const updatedItem = {...newItem, subcategories: newSubcategories}
+        const updatedCart = cart.map(item => (item._id === product._id ? updatedItem : item))
+        setCart(updatedCart);
+        updateCartData(updatedCart);
+      }
     } 
     else{
         console.log("product does not exist")

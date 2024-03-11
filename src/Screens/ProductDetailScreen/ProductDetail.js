@@ -16,7 +16,7 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState();
   const [selectedSubcategory, setSelectedSubcategory] = useState();
   const [addedToCart, setAddedToCart] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+  const [cartDetail, setCartDetail] = useState();
   const [uniquePackages, setUniquePackages] = useState();
 
   const {addToCart, incrementQuantity, decrementQuantity, cart} = useCart();
@@ -25,34 +25,20 @@ const ProductDetail = () => {
   const route = useRoute();
   const { medicineName } = route.params;
 
-  console.log(route.params);
-  console.log('medicineName.....');
-  console.log(medicineName);
-
   useEffect(() => {
     async function fetchData(){
       console.log('fetch data----------------')
       //api call to fetch medicine details based on medicine name and company
-      const response = await api.fetchMedicineDetail(medicineName)
-      console.log(response)
+      const response = await api.fetchMedicineDetail(medicineName) 
+      // console.log(response)
       setMedicineDetail(response)
     }
     fetchData();
 
   },[])
 
-  useEffect(()=>{
-    if(medicineDetail!=null){
-      const cartData = cart.filter(item => item._id === medicineDetail._id)
-      console.log('cartData', cartData)
-      if(cartData[0])
-      setQuantity(cartData[0].quantity)
-    }
-  },[cart, medicineDetail])
-
-
   useEffect(() => {
-    console.log('second use-effect',medicineDetail)
+    // console.log('second use-effect',medicineDetail)
     if(medicineDetail!=null){
       setSelectedPackage(medicineDetail.subcategories[0].Package)
       setSelectedSize(medicineDetail.subcategories[0].Size)
@@ -69,17 +55,40 @@ const ProductDetail = () => {
   useEffect(() => {
 
     updateSelectedSubcategory = () => {
+
+      // subcategory array from medicine details
       const selectedSubcategory = medicineDetail.subcategories.find(subcategory => 
         subcategory.Package === selectedPackage && subcategory.Size === selectedSize
       );
       setSelectedSubcategory(selectedSubcategory)
+
+      // overwrite subcategory array with cart's subcategory, if it exists in cart
+      if(medicineDetail!==null && cart.length!=0){
+        console.log('------------------------------')
+        const cartDetail = cart.filter(item => item._id == medicineDetail._id)
+
+        if(cartDetail.length!=0){
+          console.log('inside if...')
+          console.log('cartDetail', cartDetail[0])
+
+          const selectedSubcategory_1 = cartDetail[0].subcategories.find(subcategory => 
+            subcategory.Package === selectedPackage && subcategory.Size === selectedSize
+          );
+          if(selectedSubcategory_1){
+            setCartDetail(cartDetail[0])
+            setSelectedSubcategory(selectedSubcategory_1)
+          }
+            
+        }
+        
+      }
     }
 
     if(medicineDetail){
       updateSelectedSubcategory();
     }
         
-  },[selectedPackage, selectedSize])
+  },[selectedPackage, selectedSize, cart])
 
 
   const handlePackageChange = (packageName) => {
@@ -99,15 +108,13 @@ const ProductDetail = () => {
   const handleAddToCartPress = () => {
     console.log('inside handleAddToCartPress...');
     setAddedToCart(true);
-    const newMedicineDetail = {...medicineDetail}
-    delete newMedicineDetail.subcategories
-    addToCart(newMedicineDetail,1);
+    addToCart(medicineDetail, selectedSubcategory)
   }
 
 
   const imageUrl = 'https://drive.google.com/file/d/1aj7EOEAgTEG6MpnzDjDWW3Vrd4GJDR8m/view?usp=sharing'
   const file_id = imageUrl.split('/d/')[1].split('/')[0]
-  console.log(file_id)
+  // console.log(file_id)
   const directImageLink = `https://drive.google.com/uc?export=view&id=${file_id}`
   const directImageLinks = [`https://drive.google.com/uc?export=view&id=${file_id}`, `https://drive.google.com/uc?export=view&id=${file_id}`]
 
@@ -180,18 +187,18 @@ const ProductDetail = () => {
           <Text style={{ color: theme.primaryColor }}>Buy Now</Text>
         </Button>
 
-        {addedToCart ? (
+        {selectedSubcategory && selectedSubcategory.quantity>0 ? (
             <View style={styles.cartItem}>
               <View style={styles.quantityContainer}>
-                <TouchableOpacity onPress={() => decrementQuantity(medicineDetail._id)} style={styles.quantityButton}>
+                <TouchableOpacity onPress={() => decrementQuantity(cartDetail, selectedSubcategory)} style={styles.quantityButton}>
                   <Text style={styles.buttonText}>-</Text>
                 </TouchableOpacity>
 
                 <View style={styles.quantityDisplay}>
-                  <Text style={styles.quantityText}>{quantity}</Text>
+                  <Text style={styles.quantityText}>{selectedSubcategory.quantity}</Text>
                 </View>
 
-                <TouchableOpacity onPress={() => incrementQuantity(medicineDetail._id)} style={styles.quantityButton}>
+                <TouchableOpacity onPress={() => incrementQuantity(cartDetail, selectedSubcategory)} style={styles.quantityButton}>
                   <Text style={styles.buttonText}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -206,55 +213,7 @@ const ProductDetail = () => {
     } 
     </>
   );
-};
-
-
-
-
-  // function ProductDetail(){
-
-  //   const [medicineDetail, setMedicineDetail] = useState({})
-
-  //   const route = useRoute();
-  //   const { medicineName } = route.params;
-
-//   console.log(route.params);
-//   console.log('medicineName.....');
-//   console.log(medicineName);
-
-//   useEffect(() => {
-//     async function fetchData(){
-
-//       //api call to fetch medicine details based on medicine name and company
-//       const response = await api.fetchMedicineDetail(medicineName)
-//       console.log(response)
-//       setMedicineDetail(response)
-//     }
-//     fetchData();
-//   },[])
-
-//   // product = { id: 1, title: 'Lecope 5mg 10 Tablets', company: 'Mankind Pharma Private Ltd', quantity:'10pc', image: 'image_url', price: '₹ 19.39', description: 'In the PRINCE2 project management method, a product description is a structured format that presents information about a project product. It is a management product, usually created by the project manager during the process of initiating a project in the initial stage of the PRINCE2 project management method.' };
-
-//   return (
-//     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-
-//         <SingleProduct product={medicineDetail}/>
-
-//         {/* <Text style={styles.productDescTitle}>Product Description</Text>
-
-//         <View style={{marginBottom: 20}}>
-//             <Text style={styles.descriptionText}>{product.description}</Text>
-//             <Text></Text>
-//             <Text style={styles.descriptionText}>{product.description}</Text>
-//             <Text></Text>
-//             <Text style={styles.descriptionText}>{product.description}</Text>
-//             <Text></Text>
-//             <Text style={styles.descriptionText}>{product.description}</Text>
-//         </View> */}
-
-//     </ScrollView>
-//   );
-// };
+}
 
 
 export default () => {

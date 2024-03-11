@@ -44,13 +44,13 @@ function App() {
           <Stack.Screen name="Home" component={Home} options={{title: 'Homoeo World', headerTitleStyle: {fontWeight: '900', color: theme.primaryColor },  headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },
             headerLeft: () => <Image source= {require('C:/Users/Gauri/FULL_STACK/HomoeoWorld/assets/icons/stethoscope-blue.png')} style={{height:40, width:32,marginLeft:10}} />
           }}/>
-          <Stack.Screen name="Medicine Names" component={MedicineNamesList} options={{ headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, }}}/>
-          <Stack.Screen name="Product List" component={ProductList} options={{ headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, }}}/> 
-          <Stack.Screen name="Product Details" component={ProductDetail} options={{headerStyle: {borderBottomWidth: 1, borderBottomColor: '#ccc',elevation: 5, shadowColor: 'black', shadowRadius: 5, }}} />
+          <Stack.Screen name="Medicine Names" component={MedicineNamesList} options={{ headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
+          <Stack.Screen name="Product List" component={ProductList} options={{ headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/> 
+          <Stack.Screen name="Product Details" component={ProductDetail} options={{headerStyle: {borderBottomWidth: 1, borderBottomColor: '#ccc',elevation: 5, shadowColor: 'black', shadowRadius: 5}}} />
           <Stack.Screen name="Cart" component={Cart} options={{title: 'My Cart', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },}}/>
           <Stack.Screen name="Select Address" component={AddressList}/>
-          <Stack.Screen name="Order Placed" component={OrderPlaced} options={{headerShown: false, headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },}}/>
-          <Stack.Screen name="Orders" component={Orders}/>
+          <Stack.Screen name="Order Placed" component={OrderPlaced} options={{headerShown: false, headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
+          <Stack.Screen name="Orders" component={Orders} options={{title: 'Orders', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
         </Stack.Navigator>
     </CartProvider>
   </NativeBaseProvider>  

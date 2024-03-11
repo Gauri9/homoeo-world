@@ -6,6 +6,8 @@ import styles from './styles';
 import {
   useNavigation,
 } from "@react-navigation/native";
+import Footer from "../../components/Footer/Footer";
+
 
 const HomeScreen = () => {
   // Dummy data for categories
@@ -114,6 +116,7 @@ export default () => {
     return (
       <NativeBaseProvider>
         <HomeScreen />
+        <Footer currentScreen="Home" />
       </NativeBaseProvider>
     );
   };

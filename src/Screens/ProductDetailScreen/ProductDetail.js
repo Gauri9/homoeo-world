@@ -75,9 +75,10 @@ const ProductDetail = () => {
       setSelectedSubcategory(selectedSubcategory)
     }
 
-    if(medicineDetail)
+    if(medicineDetail){
       updateSelectedSubcategory();
-    
+    }
+        
   },[selectedPackage, selectedSize])
 
 

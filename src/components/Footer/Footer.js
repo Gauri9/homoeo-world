@@ -13,7 +13,7 @@ const Footer = (props) => {
   const onHomePress = () => {
     console.log("onHomePress...");
     // setCurrentScreen('Product List')
-    navigation.navigate("Product List");
+    navigation.navigate("Home");
   };
 
   const onCartPress = () => {
@@ -30,7 +30,7 @@ const Footer = (props) => {
 
   return (
     <View style={styles.footer}>
-      <TouchableOpacity activeOpacity={.7} onPress={onHomePress} style={[styles.footerButton, currentScreen==='Product List'&& styles.footerButtonAlt]}>
+      <TouchableOpacity activeOpacity={.7} onPress={onHomePress} style={[styles.footerButton, currentScreen==='Home'&& styles.footerButtonAlt]}>
         <Image source={require("HomoeoWorld/assets/icons/home-white.png")} 
         alt="No Image" 
         style={styles.icon}/>

@@ -15,7 +15,6 @@ const ProductDetail = () => {
   const [selectedPackage, setSelectedPackage] = useState();
   const [selectedSize, setSelectedSize] = useState();
   const [selectedSubcategory, setSelectedSubcategory] = useState();
-  const [addedToCart, setAddedToCart] = useState(false);
   const [cartDetail, setCartDetail] = useState();
   const [uniquePackages, setUniquePackages] = useState();
 
@@ -99,7 +98,6 @@ const ProductDetail = () => {
 
   const handleAddToCartPress = () => {
     console.log('inside handleAddToCartPress...');
-    setAddedToCart(true);
     addToCart(medicineDetail, selectedSubcategory)
   }
 
@@ -115,7 +113,6 @@ const ProductDetail = () => {
     {!medicineDetail && <Text>Loading...</Text>}
     {medicineDetail!=null && 
     <ScrollView style={styles.container}>
-
        <View style={styles.detailsContainer}>
         <Text style={styles.title}>{medicineDetail.title}</Text>
         <Text style={styles.company}>{medicineDetail.company}</Text>
@@ -148,7 +145,7 @@ const ProductDetail = () => {
         
 
         {/* Size Section */}
-        {medicineDetail.subcategories[0].size && 
+        {medicineDetail.subcategories[0].Size && 
         <View style={styles.section}>
         <Text style={styles.sectionTitle}>Size:</Text>
         <View style={{flexDirection:'row'}}>

@@ -52,15 +52,12 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = (productId, subcategory) => {
     console.log('inside removeFromCart...', productId)
-    console.log('subcategory', subcategory)
     const itemTobeRemoved = cart.find(item => item._id === productId);
-    console.log(itemTobeRemoved.subcategories)
     const newSubcategories = itemTobeRemoved.subcategories.map(subcat => (subcat === subcategory)? {...subcat, quantity:0} : {...subcat, quantity: subcat.quantity})
-    console.log(newSubcategories)
-    const updatedItem = {...newItem, subcategories: newSubcategories}
-    console.log('updatedItem', updatedItem)
-    const updatedCart =   cart.map(item => (item._id === productId ? updatedItem : item))
-    // const updatedCart = cart.filter(item => item._id !== product._id)
+    const updatedItem = {...itemTobeRemoved, subcategories: newSubcategories}
+    const updatedCart = cart.filter(item => item.subcategories.some(subcategory => subcategory.quantity > 0))
+    .map(item => (item._id === productId ? updatedItem : item));
+
     setCart(updatedCart);
     updateCartData(updatedCart);
   };
@@ -87,7 +84,10 @@ export const CartProvider = ({ children }) => {
     const newItem = { ...product };
     if (existingItem) {
       if(product.subcategories){
-        const newSubcategories = product.subcategories.map(subcat => (subcat === selectedSubcategory)? {...subcat, quantity:selectedSubcategory.quantity-1} : {...subcat})
+        const newSubcategories = product.subcategories.map(subcat => (subcat === selectedSubcategory)? 
+                      {...subcat, quantity:  (selectedSubcategory.quantity>0) ? selectedSubcategory.quantity-1: removeFromCart(product._id, selectedSubcategory)} 
+                      : 
+                      {...subcat})
         const updatedItem = {...newItem, subcategories: newSubcategories}
         const updatedCart = cart.map(item => (item._id === product._id ? updatedItem : item))
         setCart(updatedCart);

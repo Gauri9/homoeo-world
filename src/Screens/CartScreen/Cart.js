@@ -10,11 +10,23 @@ import styles from "./styles";
 
 function Cart() {
   const navigation = useNavigation();
+  const route = useRoute();
   const {cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity} = useCart()
-  console.log('cart...', cart)
 
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isAddressSelected, setIsAddressSelected] = useState(false);
+
+   useEffect(() => {
+    async function addressSelection() {
+      console.log("Address Selection useEffect...");
+      if (route.params !== undefined && route.params.selectedAddress !== undefined) {
+        setSelectedAddress(route.params.selectedAddress);
+        console.log('selectedAddress', selectedAddress)
+        setIsAddressSelected(true);
+      }
+    }
+    addressSelection();
+  }, [route]);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -26,7 +38,6 @@ function Cart() {
 
   const removeItemfromCart = async (productId, subcategory) => {
     console.log("removeItemfromCart...");
-
     removeFromCart(productId, subcategory)
   };
 
@@ -53,41 +64,47 @@ function Cart() {
         backgroundColor: "white",
         marginBottom: 20,
       }}
+      key={index} 
     >
-      <View style={styles.cartItem} key={index}>
-        <View style={styles.cartItemInfo}>
-          <Text style={styles.itemName}>{item.title}</Text>
-          {/* <Text style={styles.itemName}>{item.company}</Text> */}
-        </View>
-
-         
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity
-            onPress={() => decrementQuantity(item, item.subcategories[0])}
-            style={styles.quantityButton}
-          >
-            <Text style={styles.quantityButtonText}>-</Text>
+      {item.subcategories.map((subcategory, subIndex) => (
+        (subcategory.quantity > 0 && 
+        <View style={styles.cartItem} key={subIndex}>
+          <View style={styles.cartItemInfo}>
+            <Text style={styles.itemName}>{item.title}</Text>
+            <Text style={{ color: 'black' }}>{item.company}</Text>
+            <Text style={{ color: 'black' }}>{subcategory.Package} | {subcategory.Size}</Text>
+          </View>
+  
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity
+              onPress={() => decrementQuantity(item, subcategory)}
+              style={styles.quantityButton}
+            >
+              <Text style={styles.quantityButtonText}>-</Text>
+            </TouchableOpacity>
+  
+            <Text style={styles.quantity}>{subcategory.quantity}</Text>
+  
+            <TouchableOpacity
+              onPress={() => incrementQuantity(item, subcategory)}
+              style={styles.quantityButton}
+            >
+              <Text style={styles.quantityButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+            <View style={styles.removeButtonContainer}>
+          <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={styles.removeButton}>
+            <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon} />
+            {/* <Text style={{ color: theme.primaryColor }}>Remove</Text> */}
           </TouchableOpacity>
-
-          <Text style={styles.quantity}>{item.subcategories[0].quantity}</Text>
-
-          <TouchableOpacity
-            onPress={() => incrementQuantity(item, item.subcategories[0])}
-            style={styles.quantityButton}
-          >
-            <Text style={styles.quantityButtonText}>+</Text>
-          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.removeButtonContainer}>
-        <TouchableOpacity onPress={() => removeItemfromCart(item._id, item.subcategories[0])} style={styles.removeButton}>
-           <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon}/>
-            <Text style={{ color: theme.primaryColor }}>Remove</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.separator} />
+        <View style={styles.separator} />
+        </View>)
+      ))}
+      
     </View>
   );
+  
 
   const calculatecartTotal = () => {
     console.log('calculatecartTotal...')

@@ -65,6 +65,7 @@ function AddressList() {
 
   const onPlaceOrderPress = () => {
     console.log('onPlaceOrderPress...');
+    console.log('Address List: ',selectedAddress)
     navigation.navigate('Cart',{selectedAddress})
   }
 

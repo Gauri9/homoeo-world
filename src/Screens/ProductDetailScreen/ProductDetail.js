@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import {NativeBaseProvider, Button } from 'native-base';
-import SingleProduct from '../../components/SingleProduct/SingleProduct';
+// import SingleProduct from '../../components/SingleProduct/SingleProduct';
 import Footer from '../../components/Footer/Footer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import styles from './styles';
@@ -38,7 +38,6 @@ const ProductDetail = () => {
   },[])
 
   useEffect(() => {
-    // console.log('second use-effect',medicineDetail)
     if(medicineDetail!=null){
       setSelectedPackage(medicineDetail.subcategories[0].Package)
       setSelectedSize(medicineDetail.subcategories[0].Size)
@@ -46,7 +45,6 @@ const ProductDetail = () => {
         subcategory.Package === selectedPackage && subcategory.Size === selectedSize
       );
       setSelectedSubcategory(selectedSubcategory)
-
       setUniquePackages(new Set(medicineDetail.subcategories.map(subcategory => subcategory.Package)));
     }
     
@@ -55,7 +53,6 @@ const ProductDetail = () => {
   useEffect(() => {
 
     updateSelectedSubcategory = () => {
-
       // subcategory array from medicine details
       const selectedSubcategory = medicineDetail.subcategories.find(subcategory => 
         subcategory.Package === selectedPackage && subcategory.Size === selectedSize
@@ -68,17 +65,13 @@ const ProductDetail = () => {
         const cartDetail = cart.filter(item => item._id == medicineDetail._id)
 
         if(cartDetail.length!=0){
-          console.log('inside if...')
-          console.log('cartDetail', cartDetail[0])
-
           const selectedSubcategory_1 = cartDetail[0].subcategories.find(subcategory => 
             subcategory.Package === selectedPackage && subcategory.Size === selectedSize
           );
           if(selectedSubcategory_1){
             setCartDetail(cartDetail[0])
             setSelectedSubcategory(selectedSubcategory_1)
-          }
-            
+          }  
         }
         
       }
@@ -86,8 +79,7 @@ const ProductDetail = () => {
 
     if(medicineDetail){
       updateSelectedSubcategory();
-    }
-        
+    }    
   },[selectedPackage, selectedSize, cart])
 
 
@@ -156,28 +148,33 @@ const ProductDetail = () => {
         
 
         {/* Size Section */}
+        {medicineDetail.subcategories[0].size && 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Size:</Text>
-          <View style={{flexDirection:'row'}}>
-            {medicineDetail.subcategories.map((subcategory, index) => (
-              <TouchableOpacity key={index} onPress={() => handleSizeChange(subcategory.Size)} style={[styles.sectionButton, selectedSize==subcategory.Size ? {backgroundColor:theme.primaryColor, opacity:0.5} : null]}>
-                <Text style={styles.size}>
-                  {subcategory.Size}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-       
+        <Text style={styles.sectionTitle}>Size:</Text>
+        <View style={{flexDirection:'row'}}>
+          {medicineDetail.subcategories.map((subcategory, index) => (
+            <TouchableOpacity key={index} onPress={() => handleSizeChange(subcategory.Size)} style={[styles.sectionButton, selectedSize==subcategory.Size ? {backgroundColor:theme.primaryColor, opacity:0.5} : null]}>
+              <Text style={styles.size}>
+                {subcategory.Size}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
+      </View>}
+        
 
         {/* Price Section */}
-        {selectedSubcategory!=null && 
+        {selectedSubcategory!=null && selectedSubcategory['Discounted Percentage'] &&
         <View style={styles.priceContainer}>
           <Text style={styles.discountedPrice}>₹{selectedSubcategory.MRP - selectedSubcategory.MRP*selectedSubcategory['Discounted Percentage']*0.01}</Text>
           <Text style={styles.mrp}>MRP: ₹{selectedSubcategory.MRP}</Text>
           <Text style={styles.discount}> {selectedSubcategory['Discounted Percentage']}% off</Text>
+        </View>}
+        {selectedSubcategory!=null && !selectedSubcategory['Discounted Percentage'] &&
+        <View style={styles.priceContainer}>
+          <Text style={styles.discountedPrice}>MRP: ₹{selectedSubcategory.MRP}</Text>
         </View>
-      }
+        }
         
       </View>
       <View

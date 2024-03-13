@@ -24,10 +24,10 @@ function Cart() {
      navigation.navigate('Product List');
   }
 
-  const removeItemfromCart = async (productId) => {
+  const removeItemfromCart = async (productId, subcategory) => {
     console.log("removeItemfromCart...");
 
-    removeFromCart(productId)
+    removeFromCart(productId, subcategory)
   };
 
   const onSelectAddressPress = async () => {
@@ -57,20 +57,22 @@ function Cart() {
       <View style={styles.cartItem} key={index}>
         <View style={styles.cartItemInfo}>
           <Text style={styles.itemName}>{item.title}</Text>
+          {/* <Text style={styles.itemName}>{item.company}</Text> */}
         </View>
 
+         
         <View style={styles.quantityContainer}>
           <TouchableOpacity
-            onPress={() => decrementQuantity(item._id)}
+            onPress={() => decrementQuantity(item, item.subcategories[0])}
             style={styles.quantityButton}
           >
             <Text style={styles.quantityButtonText}>-</Text>
           </TouchableOpacity>
 
-          <Text style={styles.quantity}>{item.quantity}</Text>
+          <Text style={styles.quantity}>{item.subcategories[0].quantity}</Text>
 
           <TouchableOpacity
-            onPress={() => incrementQuantity(item._id)}
+            onPress={() => incrementQuantity(item, item.subcategories[0])}
             style={styles.quantityButton}
           >
             <Text style={styles.quantityButtonText}>+</Text>
@@ -78,7 +80,7 @@ function Cart() {
         </View>
       </View>
       <View style={styles.removeButtonContainer}>
-        <TouchableOpacity onPress={() => removeItemfromCart(item._id)} style={styles.removeButton}>
+        <TouchableOpacity onPress={() => removeItemfromCart(item._id, item.subcategories[0])} style={styles.removeButton}>
            <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon}/>
             <Text style={{ color: theme.primaryColor }}>Remove</Text>
         </TouchableOpacity>

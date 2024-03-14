@@ -10,14 +10,22 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  const emptyMyCart = async () => {
+    console.log('emptyMyCart...')
+    const updatedCart = []
+    setCart(updatedCart);
+    updateCartData(updatedCart);
+  }
+  
   useEffect(() => {
     // Load cart data from AsyncStorage when the component mounts
     const loadCartData = async () => {
       try {
         const savedCart = await AsyncStorage.getItem('cart');
+        console.log('savedCart', savedCart)
         if (savedCart !== null) {
           setCart(JSON.parse(savedCart));
-          console.log(cart)
+          console.log('cart', cart)
         }
       } catch (error) {
         console.error('Error loading cart data:', error);
@@ -55,11 +63,11 @@ export const CartProvider = ({ children }) => {
     const itemTobeRemoved = cart.find(item => item._id === productId);
     const newSubcategories = itemTobeRemoved.subcategories.map(subcat => (subcat === subcategory)? {...subcat, quantity:0} : {...subcat, quantity: subcat.quantity})
     const updatedItem = {...itemTobeRemoved, subcategories: newSubcategories}
-    const updatedCart = cart.filter(item => item.subcategories.some(subcategory => subcategory.quantity > 0))
-    .map(item => (item._id === productId ? updatedItem : item));
+    const updatedCart = cart.map(item => (item._id === productId ? updatedItem : item));
+    const updatedCart_ = updatedCart.filter(item => item.subcategories.some(subcategory => subcategory.quantity > 0))
 
-    setCart(updatedCart);
-    updateCartData(updatedCart);
+    setCart(updatedCart_);
+    updateCartData(updatedCart_);
   };
 
   const incrementQuantity = (product, selectedSubcategory) => {
@@ -100,7 +108,7 @@ export const CartProvider = ({ children }) => {
   }
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, emptyMyCart }}>
       {children}
     </CartContext.Provider>
   );

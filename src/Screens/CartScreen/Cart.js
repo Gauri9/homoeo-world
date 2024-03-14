@@ -11,7 +11,7 @@ import styles from "./styles";
 function Cart() {
   const navigation = useNavigation();
   const route = useRoute();
-  const {cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity} = useCart()
+  const {cart, addToCart, removeFromCart, incrementQuantity, decrementQuantity, emptyMyCart} = useCart()
 
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isAddressSelected, setIsAddressSelected] = useState(false);
@@ -110,7 +110,7 @@ function Cart() {
     console.log('calculatecartTotal...')
     let cartTotal = 0;
     cart.forEach((item)=>{
-      console.log(item);
+      // console.log(item);
       cartTotal = 20
     })
     return cartTotal;

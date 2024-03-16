@@ -7,6 +7,8 @@ import { theme } from "HomoeoWorld/src/utils/theme.js";
 const Footer = (props) => {
   const navigation = useNavigation();
 
+  console.log("Ameya Changes!!!");
+
   // const [currentScreen, setCurrentScreen] = useState('Home');
   const {currentScreen} = props;
 

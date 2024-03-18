@@ -23,7 +23,7 @@ const AutocompleteSearchBar = () => {
     try {
       console.log('searchTerm', searchTerm)
       const response = await api.searchProducts(searchTerm);
-      console.log(response.data)
+      console.log('response.data', response.data)
       setSearchResults(response.data);
     } catch (error) {
       console.log(error);
@@ -33,14 +33,15 @@ const AutocompleteSearchBar = () => {
   const gotoProductDetails = async (title) => {
     console.log("gotoProductDetails");
 
-    const response = await api.getProductByTitle(title);
-    const productData = response.data;
+    // const response = await api.getProductByTitle(title);
+    // const productData = response.data;
 
-    setProduct(productData);
-    console.log(product);
+    // setProduct(productData);
+    // console.log(product);
 
     // const product = response.data;
-    navigation.navigate("Product Details", { product: productData });
+    // navigation.navigate("Product Details", { product: productData });
+    navigation.navigate("Product Details", {medicineName: title})
   };
 
   return (

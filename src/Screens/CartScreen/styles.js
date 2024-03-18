@@ -117,11 +117,12 @@ export default styles = StyleSheet.create({
     detailRow: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginBottom: 8,
+      marginVertical: 8,
     },
     orderTotalText: {
-      fontSize: 18,
-      fontWeight: "bold",
+      fontSize: 16,
+      fontWeight: "800",
+      color: 'black'
     },
     orderTotal: {
       fontSize: 18,
@@ -153,22 +154,27 @@ export default styles = StyleSheet.create({
       // backgroundColor: 'lightgrey'
     },
     removeButtonContainer:{
-       alignItems: "center", 
-       paddingBottom: 20 
+      flexDirection: 'row',
+      justifyContent:'space-between'
+      //  alignItems: "center", 
+      //  paddingBottom: 20 
     },
     removeButton: {
-      flexDirection:'row',
-      borderWidth: 1,
-      borderColor: theme.primaryColor,
-      borderRadius: 12,
-      paddingHorizontal: 10,
-      paddingVertical:1,
-      alignItems: 'center'
+      // flexDirection:'row',
+      // justifyContent: 'flex-end',
+      // marginRight: 1
+      // borderWidth: 1,
+      // borderColor: theme.primaryColor,
+      // borderRadius: 12,
+      // paddingHorizontal: 10,
+      // paddingVertical:1,
+      // alignItems: 'center'
     },
     separator: {
       borderBottomWidth: 1,
       height:1,
-      borderBottomColor: 'lightgrey'
+      borderBottomColor: 'lightgrey',
+      marginVertical:8
     },
     icon:{
       height: 16,

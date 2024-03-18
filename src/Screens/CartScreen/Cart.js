@@ -70,7 +70,12 @@ function Cart() {
         (subcategory.quantity > 0 && 
         <View style={styles.cartItem} key={subIndex}>
           <View style={styles.cartItemInfo}>
+          <View style={styles.removeButtonContainer}>
             <Text style={styles.itemName}>{item.title}</Text>
+            <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={styles.removeButton}>
+              <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
             <Text style={{ color: 'black' }}>{item.company}</Text>
             <Text style={{ color: 'black' }}>{subcategory.Package} | {subcategory.Size}</Text>
           </View>
@@ -92,12 +97,12 @@ function Cart() {
               <Text style={styles.quantityButtonText}>+</Text>
             </TouchableOpacity>
           </View>
-            <View style={styles.removeButtonContainer}>
-          <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={styles.removeButton}>
-            <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon} />
-            {/* <Text style={{ color: theme.primaryColor }}>Remove</Text> */}
-          </TouchableOpacity>
-        </View>
+          <View style={styles.removeButtonContainer}>
+            <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={styles.removeButton}>
+              <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon} />
+              {/* <Text style={{ color: theme.primaryColor }}>Remove</Text> */}
+            </TouchableOpacity>
+          </View>
         <View style={styles.separator} />
         </View>)
       ))}
@@ -108,17 +113,29 @@ function Cart() {
 
   const calculatecartTotal = () => {
     console.log('calculatecartTotal...')
-    let cartTotal = 0;
-    cart.forEach((item)=>{
-      // console.log(item);
-      cartTotal = 20
-    })
-    return cartTotal;
+    
   }
 
-  const cartTotal = calculatecartTotal();
-  const medicineDiscount = 0;
-  const couponDiscount = 0;
+  const totalMRP = () => {
+    let totalMRP = 0
+    cart.forEach(item => {
+      item.subcategories.forEach(subcategory => {
+        totalMRP = totalMRP + subcategory.quantity*subcategory.MRP
+      })
+    })
+    console.log('totalMRP', totalMRP)
+    return totalMRP;
+  }
+
+  const discountedPrice = () => {
+    let dp = 0;
+    cart.forEach(item => {
+      item.subcategories.forEach(subcategory => {
+        dp = dp + (subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01);
+      })
+    })
+    return dp;
+  }
 
   return (
     <View style={styles.container}>
@@ -151,23 +168,25 @@ function Cart() {
             </Text>
             <Card style={styles.paymentDetailsContainer}>
               <View style={styles.detailRow}>
-                <Text style={{color:"black"}}>Cart Total:</Text>
-                <Text style={{color:"black"}}>{cartTotal}</Text>
+                <Text style={{color:"black"}}>Total MRP</Text>
+                <Text style={{color:"black"}}>{totalMRP()}</Text>
               </View>
 
               <View style={styles.detailRow}>
-                <Text style={{color:"black"}}>Medicine Discount:</Text>
-                <Text style={{color:"black"}}>{medicineDiscount}</Text>
+                <Text style={{color:"black"}}>Discount on MRP</Text>
+                <Text style={{color:"black"}}>{discountedPrice()}</Text>
               </View>
 
               <View style={styles.detailRow}>
-                <Text style={{color:"black"}}>Coupon Discount:</Text>
-                <Text style={{color:"black"}}>{couponDiscount}</Text>
+                <Text style={{color:"black"}}>Shipping Fee</Text>
+                <Text style={{color:"black"}}>FREE</Text>
               </View>
 
+              <View style={styles.separator} />
+
               <View style={styles.detailRow}>
-              <Text style={[styles.orderTotalText, { color: 'black' }]}>Order Total:</Text>
-                <Text style={[styles.orderTotal, {color:'green'}]}>{cartTotal - medicineDiscount - couponDiscount}</Text>
+              <Text style={styles.orderTotalText}>Total Amount</Text>
+                <Text style={styles.orderTotalText}>{totalMRP()}</Text>
               </View>
             </Card>
           </>

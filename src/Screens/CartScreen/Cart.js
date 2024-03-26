@@ -16,6 +16,10 @@ function Cart() {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isAddressSelected, setIsAddressSelected] = useState(false);
 
+  // useEffect(() => {
+  //   emptyMyCart();
+  // },[])
+
    useEffect(() => {
     async function addressSelection() {
       console.log("Address Selection useEffect...");
@@ -33,7 +37,7 @@ function Cart() {
   };
 
   const onAddItemsPress = () => {
-     navigation.navigate('Product List');
+     navigation.navigate('Home');
   }
 
   const removeItemfromCart = async (productId, subcategory) => {
@@ -66,7 +70,7 @@ function Cart() {
       }}
       key={index} 
     >
-      {item.subcategories.map((subcategory, subIndex) => (
+      {item && item.subcategories && item.subcategories.map((subcategory, subIndex) => (
         (subcategory.quantity > 0 && 
         <View style={styles.cartItem} key={subIndex}>
           <View style={styles.cartItemInfo}>

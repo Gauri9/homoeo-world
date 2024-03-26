@@ -29,7 +29,7 @@ const ProductDetail = () => {
       console.log('fetch data----------------')
       //api call to fetch medicine details based on medicine name and company
       const response = await api.fetchMedicineDetail(medicineName) 
-      // console.log(response)
+      console.log(response)
       setMedicineDetail(response)
     }
     fetchData();
@@ -93,6 +93,9 @@ const ProductDetail = () => {
 
   const handleBuyPress = () => {
     console.log('inside handleBuyPress...')
+    // if(!cart.find(item => item.title === medicineDetail.title)){
+      // addToCart(medicineDetail, selectedSubcategory)
+    // }
     navigation.navigate("Cart")
   }
 

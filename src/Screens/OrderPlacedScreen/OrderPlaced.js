@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { NativeBaseProvider } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { theme } from "HomoeoWorld/src/utils/theme.js";
 import styles from "./styles";
 
 function OrderPlaced() {
   const navigation = useNavigation();
+
+  // const route = useRoute();
+  // const { orderDetails } = route.params;
+  // console.log('route.params', route.params)
 
   const handleDonePress = () => {
     console.log("handleDonePress...");

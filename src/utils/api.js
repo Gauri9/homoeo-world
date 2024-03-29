@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // const apiBaseUrl = Config.API_BASE_URL;
 // const apiBaseUrl = 'https://medical-app-5gdu.onrender.com'
-// const apiBaseUrl = 'http://192.168.1.102:5000'
-const apiBaseUrl = 'https://gauri-try.df.r.appspot.com'
+const apiBaseUrl = 'http://192.168.1.103:5000'
+// const apiBaseUrl = 'https://gauri-try.df.r.appspot.com'
 
 export const postCredentials = async (creds) => await axios.post(`${apiBaseUrl}/login`,creds);  //on signup page
 export const validateCredentials = async (creds) => {
@@ -13,6 +13,15 @@ export const validateCredentials = async (creds) => {
     console.log('response', response)
     return response;
 }
+
+//order
+export const postOrderDetails = async (orderDetails) => {
+    const headers = {
+        'Content-Type': 'application/json',
+      };
+    const response = await axios.post(`${apiBaseUrl}/order/postorder` , {orderDetails},{headers})
+    console.log('response', response)
+} 
 
 //product
 export const getProducts = async (page, pageSize) => await axios.get(`${apiBaseUrl}/product/getproducts`, {

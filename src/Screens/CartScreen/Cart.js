@@ -8,6 +8,7 @@ import { theme } from "HomoeoWorld/src/utils/theme.js";
 import { useCart } from "../../Context/CartContext";
 import styles from "./styles";
 import OrderDetailsModal from '../../components/OrderDetailsModal/OrderDetailsModal';
+import * as api from '../../utils/api.js'
 // import AddressFormModal from "../../components/AddressForm/AddressFormModal.js";
 
 function Cart() {
@@ -18,35 +19,8 @@ function Cart() {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isAddressSelected, setIsAddressSelected] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const orderData = {
-    "user_id": "65dd8ffc3f33f89b5111f936",
-    "order_items": [
-        {"title": "from ui testing",
-        "company": "SBL",
-        "package": "Tablets",
-        "size": "6x 25g",
-        "MRP": 105,
-        "discountedPercentage": 10,
-        "quantity": 2
-        },
-        {"title": "Calcarea Flurocia 3x",
-        "company": "Schwabe",
-        "package": "Tablets",
-        "size": "6x 50g",
-        "MRP": 105,
-        "discountedPercentage": 10,
-        "quantity": 3
-        }
-    ],
-    "order_status": "PENDING",
-    "shipping_address": "Sky home PG",
-    "order_total": 210,
-    "order_instruction": "keep it outside the door",
-    "delivery_date": "2024-03-24",
-    "order_timestamp": "2024-03-17"
-}
-
-
+  const [orderDetails, setOrderDetails] = useState();
+  
 
   // useEffect(() => {
   //   emptyMyCart();
@@ -94,7 +68,35 @@ function Cart() {
   };
 
   const onClose = async () => {
-    setIsModalVisible(false)
+    setIsModalVisible(false);
+      const orderData = {
+        "user_id": "65dd8ffc3f33f89b5111f936",
+        "order_items": [
+            {"title": "testing-2",
+            "company": "SBL",
+            "package": "Tablets",
+            "size": "6x 25g",
+            "MRP": 105,
+            "discountedPercentage": 10,
+            "quantity": 2
+            },
+            {"title": "Calcarea Flurocia 3x",
+            "company": "Schwabe",
+            "package": "Tablets",
+            "size": "6x 50g",
+            "MRP": 105,
+            "discountedPercentage": 10,
+            "quantity": 3
+            }
+        ],
+        "order_status": "PENDING",
+        "shipping_address": "Vishal PG",
+        "order_total": 210,
+        "order_instruction": "keep it outside the door",
+        "delivery_date": "2024-03-24",
+        "order_timestamp": "2024-03-17"
+      };   
+      api.postOrderDetails(orderData)
     navigation.navigate("Order Placed");
   }
 

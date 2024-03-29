@@ -7,8 +7,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { theme } from "HomoeoWorld/src/utils/theme.js";
 import { useCart } from "../../Context/CartContext";
 import styles from "./styles";
-import OrderDetailsModal from '../../components/OrderDetailsModal/OrderDetailsModal';
-// import AddressFormModal from "../../components/AddressForm/AddressFormModal.js";
 
 function Cart() {
   const navigation = useNavigation();
@@ -17,36 +15,6 @@ function Cart() {
 
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isAddressSelected, setIsAddressSelected] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const orderData = {
-    "user_id": "65dd8ffc3f33f89b5111f936",
-    "order_items": [
-        {"title": "from ui testing",
-        "company": "SBL",
-        "package": "Tablets",
-        "size": "6x 25g",
-        "MRP": 105,
-        "discountedPercentage": 10,
-        "quantity": 2
-        },
-        {"title": "Calcarea Flurocia 3x",
-        "company": "Schwabe",
-        "package": "Tablets",
-        "size": "6x 50g",
-        "MRP": 105,
-        "discountedPercentage": 10,
-        "quantity": 3
-        }
-    ],
-    "order_status": "PENDING",
-    "shipping_address": "Sky home PG",
-    "order_total": 210,
-    "order_instruction": "keep it outside the door",
-    "delivery_date": "2024-03-24",
-    "order_timestamp": "2024-03-17"
-}
-
-
 
   // useEffect(() => {
   //   emptyMyCart();
@@ -89,14 +57,8 @@ function Cart() {
 
   const onConfirmOrderPress = async () => {
     console.log("onConfirmOrderPress...");
-    setIsModalVisible(true);
-    // navigation.navigate("Order Placed");
-  };
-
-  const onClose = async () => {
-    setIsModalVisible(false)
     navigation.navigate("Order Placed");
-  }
+  };
 
 
   const renderCartItem = (item, index) => (
@@ -120,15 +82,6 @@ function Cart() {
           </View>
             <Text style={{ color: 'black' }}>{item.company}</Text>
             <Text style={{ color: 'black' }}>{subcategory.Package} | {subcategory.Size}</Text>
-
-            <View style = {{display: 'flex', flexDirection: 'row'}}>
-              <Text style={{color: 'black'}}>₹ {(subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01)*subcategory.quantity}  </Text>
-              <Text style={{ color: 'black', textDecorationLine:"line-through"}}>MRP: ₹{subcategory.MRP*subcategory.quantity}</Text>
-            </View>
-            
-            {/* <Text style={{color: 'black'}}>₹{subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01}</Text> */}
-            {/* <Text style={{ color: 'black', textDecorationLine:"line-through"}}>Rs. {subcategory.MRP*subcategory.quantity}</Text> */}
-
           </View>
   
           <View style={styles.quantityContainer}>
@@ -171,7 +124,7 @@ function Cart() {
     let totalMRP = 0
     cart.forEach(item => {
       item.subcategories.forEach(subcategory => {
-        totalMRP = totalMRP + subcategory.MRP*subcategory.quantity
+        totalMRP = totalMRP + subcategory.quantity*subcategory.MRP
       })
     })
     console.log('totalMRP', totalMRP)
@@ -182,7 +135,7 @@ function Cart() {
     let dp = 0;
     cart.forEach(item => {
       item.subcategories.forEach(subcategory => {
-        dp = dp + (subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01)*subcategory.quantity;
+        dp = dp + (subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01);
       })
     })
     return dp;
@@ -225,7 +178,7 @@ function Cart() {
 
               <View style={styles.detailRow}>
                 <Text style={{color:"black"}}>Discount on MRP</Text>
-                <Text style={{color:"black"}}>{totalMRP() - discountedPrice()}</Text>
+                <Text style={{color:"black"}}>{discountedPrice()}</Text>
               </View>
 
               <View style={styles.detailRow}>
@@ -237,7 +190,7 @@ function Cart() {
 
               <View style={styles.detailRow}>
               <Text style={styles.orderTotalText}>Total Amount</Text>
-                <Text style={styles.orderTotalText}>{discountedPrice()}</Text>
+                <Text style={styles.orderTotalText}>{totalMRP()}</Text>
               </View>
             </Card>
           </>
@@ -271,10 +224,6 @@ function Cart() {
           <Text style={styles.checkoutButtonText}>Confirm Order</Text>
         </TouchableOpacity>
       )}
-
-      <OrderDetailsModal isVisible={isModalVisible} onClose={onClose} />
-      {/* <AddressFormModal isVisible={isModalVisible} onSave={handleSaveAddress} onClose={toggleModal} /> */}
-
     </View>
   );
 }

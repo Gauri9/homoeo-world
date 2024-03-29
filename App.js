@@ -39,7 +39,8 @@ function App() {
           {/* working on this screen -- temp*/}
           {/* <Stack.Screen name="POC" component={ImageRenderPOC}/> */}
           
-          {/* <Stack.Screcame="Signup" component={Signup} options={{headerShown: false}}/> */}
+          <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+          <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/>
           <Stack.Screen name="Home" component={Home} options={{title: 'Homoeo World', headerTitleStyle: {fontWeight: '900', color: theme.primaryColor },  headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },
             headerLeft: () => <Image source= {require('C:/Users/Gauri/FULL_STACK/HomoeoWorld/assets/icons/stethoscope-blue.png')} style={{height:40, width:32,marginLeft:10}} />
           }}/>

@@ -25,6 +25,7 @@ import { useNavigation } from '@react-navigation/native';
 import { CartProvider } from './src/Context/CartContext';
 
 import { theme } from './src/utils/theme';
+import OrderDetailsPage from './src/Screens/OrderDetailsPage/OrderDetailsPage';
 
 const Stack = createStackNavigator();
 
@@ -37,7 +38,7 @@ function App() {
     <CartProvider>
         <Stack.Navigator>
           {/* working on this screen -- temp*/}
-          {/* <Stack.Screen name="POC" component={ImageRenderPOC}/> */}
+          {/* <Stack.Screen name="Order Detail Page" component={OrderDetailsPage}/> */}
           
           {/* <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
           <Stack.Screen name="Signup" component={Signup} options={{headerShown: false}}/> */}

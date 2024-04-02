@@ -115,6 +115,10 @@ export default styles = StyleSheet.create({
       width: 40, 
       height: 40, 
       marginRight: 10 
-    }
+    },
+    warningText: {
+      color: 'red',
+      marginTop: 5,
+    },
     
   });

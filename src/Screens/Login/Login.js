@@ -22,6 +22,8 @@ function Login() {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(true);
+
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [canLogin, setCanLogin] = useState(true);
@@ -37,9 +39,19 @@ function Login() {
   const disable = checkDisable();
 
   const handleEmailInputChange = (value) => {
-    setEmail(value);
-    console.log(email);
+    // Regular expression for validating email addresses
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Check if the input value matches the email format
+    if (emailRegex.test(value)) {
+      setEmail(value);
+      setEmailValid(true);     
+    } 
+    else {
+      setEmailValid(false)
+    }
   };
+  
 
   const handlePasswordInputChange = (value) => {
     setPassword(value);
@@ -111,6 +123,7 @@ function Login() {
             placeholder="Username or Email"
             onChangeText={handleEmailInputChange}
           />
+          {!emailValid && <Text style={styles.warningText}>Invalid email format</Text>}
         </View>
       </View>
 

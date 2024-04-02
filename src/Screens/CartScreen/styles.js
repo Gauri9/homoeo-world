@@ -5,7 +5,7 @@ export default styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 16,
-      backgroundColor: "#fff",
+      // backgroundColor: "#fff",
     },
     title: {
       fontSize: 28,
@@ -20,7 +20,7 @@ export default styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      backgroundColor: "white",
+      // backgroundColor: "white",
       borderRadius: 8,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -113,11 +113,13 @@ export default styles = StyleSheet.create({
       shadowOpacity: 0.2,
       shadowRadius: 4,
       marginBottom: 20,
+      borderWidth:0.5,
+      borderColor: theme.primaryColor
     },
     detailRow: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginVertical: 8,
+      marginVertical: 3,
     },
     orderTotalText: {
       fontSize: 16,
@@ -136,13 +138,12 @@ export default styles = StyleSheet.create({
       padding: 16,
       backgroundColor: "white",
       borderRadius: 8,
-      borderWidth: 1,
+      borderWidth: 0.5,
       borderColor: theme.primaryColor,
       // overflow:'visible'
     },
     addressHeaderText: {
-      fontSize: 14,
-      fontWeight: "bold",
+      fontSize: 16,
       color: "grey",
       marginBottom: 8,
       color:'black'
@@ -154,8 +155,8 @@ export default styles = StyleSheet.create({
       // backgroundColor: 'lightgrey'
     },
     removeButtonContainer:{
-      flexDirection: 'row',
-      justifyContent:'space-between'
+      // flexDirection: 'row',
+      // justifyContent:'space-between'
       //  alignItems: "center", 
       //  paddingBottom: 20 
     },
@@ -172,7 +173,7 @@ export default styles = StyleSheet.create({
     },
     separator: {
       borderBottomWidth: 1,
-      height:1,
+      height:2,
       borderBottomColor: 'lightgrey',
       marginVertical:8
     },

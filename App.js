@@ -38,6 +38,8 @@ function App() {
     <CartProvider>
         <Stack.Navigator>
           {/* working on this screen -- temp*/}
+          {/* <Stack.Screen name="Cart" component={Cart} options={{title: 'My Cart', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },}}/> */}
+
           {/* <Stack.Screen name="Order Detail Page" component={OrderDetailsPage}/> */}
           
           {/* <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
@@ -48,7 +50,7 @@ function App() {
           <Stack.Screen name="Medicine Names" component={MedicineNamesList} options={{ headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
           <Stack.Screen name="Product List" component={ProductList} options={{ headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/> 
           <Stack.Screen name="Product Details" component={ProductDetail} options={{headerStyle: {borderBottomWidth: 1, borderBottomColor: '#ccc',elevation: 5, shadowColor: 'black', shadowRadius: 5}}} />
-          <Stack.Screen name="Cart" component={Cart} options={{title: 'My Cart', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },}}/>
+          <Stack.Screen name="Cart" component={Cart} options={{title: 'Cart', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },}}/>
           <Stack.Screen name="Select Address" component={AddressList}/>
           <Stack.Screen name="Order Placed" component={OrderPlaced} options={{headerShown: false, headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
           <Stack.Screen name="Orders" component={Orders} options={{title: 'Orders', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>

@@ -19,12 +19,13 @@ function Cart() {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isAddressSelected, setIsAddressSelected] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [orderDetails, setOrderDetails] = useState();
+  // const [orderDetails, setOrderDetails] = useState();
   
 
-  // useEffect(() => {
-  //   emptyMyCart();
-  // },[])
+  useEffect(() => {
+    console.log('cart', cart)
+    // console.log('cart', cart[0].subcategories)
+  },[])
 
    useEffect(() => {
     async function addressSelection() {
@@ -92,7 +93,6 @@ function Cart() {
         "order_status": "PENDING",
         "shipping_address": "Vishal PG",
         "order_total": 210,
-        "order_instruction": "keep it outside the door",
         "delivery_date": "2024-03-24",
         "order_timestamp": "2024-03-17"
       };   
@@ -103,41 +103,39 @@ function Cart() {
 
   const renderCartItem = (item, index) => (
     <View
-      style={{
-        flexDirection: "column",
-        backgroundColor: "white",
-        marginBottom: 20,
-      }}
+      style={{flexDirection: "column"}}
       key={index} 
     >
       {item && item.subcategories && item.subcategories.map((subcategory, subIndex) => (
         (subcategory.quantity > 0 && 
-        <View style={styles.cartItem} key={subIndex}>
-          <View style={styles.cartItemInfo}>
-          <View style={styles.removeButtonContainer}>
+          <View style={{flexDirection:"column", backgroundColor: "#fff", marginBottom: 10, padding: 10, borderRadius: 15, borderWidth: 0.5, borderColor: theme.primaryColor}}>
+
+            {/* c1 */}
+          <View style={{flexDirection:"row",justifyContent:"space-between",backgroundColor:"white"}}>
             <Text style={styles.itemName}>{item.title}</Text>
-            <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={styles.removeButton}>
+            <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={{}}>
               <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon} />
             </TouchableOpacity>
           </View>
-            <Text style={{ color: 'black' }}>{item.company}</Text>
-            <Text style={{ color: 'black' }}>{subcategory.Package} | {subcategory.Size}</Text>
 
-            <View style = {{display: 'flex', flexDirection: 'row'}}>
-              <Text style={{color: 'black'}}>₹ {(subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01)*subcategory.quantity}  </Text>
-              <Text style={{ color: 'black', textDecorationLine:"line-through"}}>MRP: ₹{subcategory.MRP*subcategory.quantity}</Text>
-            </View>
+           {/* c2 */}
+          <View style={{flexDirection:"row"}}>
+            {/* C3 */}
+            <View style={styles.cartItemInfo}>
+                <Text style={{ color: 'black' }}>{item.company}</Text>
+                <Text style={{ color: 'black' }}>{subcategory.Package} | {subcategory.Size}</Text>
+
+                <View style = {{display: 'flex', flexDirection: 'row'}}>
+                  <Text style={{color: 'black'}}>₹ {(subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01)*subcategory.quantity}  </Text>
+                  <Text style={{ color: 'black', textDecorationLine:"line-through", color:'grey'}}>MRP: ₹{subcategory.MRP*subcategory.quantity}</Text>
+                </View>
             
-            {/* <Text style={{color: 'black'}}>₹{subcategory.MRP - subcategory.MRP*subcategory['Discounted Percentage']*0.01}</Text> */}
-            {/* <Text style={{ color: 'black', textDecorationLine:"line-through"}}>Rs. {subcategory.MRP*subcategory.quantity}</Text> */}
+            </View>
 
-          </View>
-  
-          <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              onPress={() => decrementQuantity(item, subcategory)}
-              style={styles.quantityButton}
-            >
+            {/* C4 */}
+            <View style={styles.quantityContainer}>
+
+            <TouchableOpacity onPress={() => decrementQuantity(item, subcategory)} style={styles.quantityButton} >
               <Text style={styles.quantityButtonText}>-</Text>
             </TouchableOpacity>
   
@@ -150,14 +148,9 @@ function Cart() {
               <Text style={styles.quantityButtonText}>+</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.removeButtonContainer}>
-            <TouchableOpacity onPress={() => removeItemfromCart(item._id, subcategory)} style={styles.removeButton}>
-              <Image source={require("HomoeoWorld/assets/icons/delete.png")} style={styles.icon} />
-              {/* <Text style={{ color: theme.primaryColor }}>Remove</Text> */}
-            </TouchableOpacity>
           </View>
-        <View style={styles.separator} />
-        </View>)
+        </View>
+        )
       ))}
       
     </View>
@@ -205,7 +198,7 @@ function Cart() {
                   }}
                 >
                   <Text style={styles.addressHeaderText}>
-                    Deliver to this address
+                    Delivery Address
                   </Text>
                   <TouchableOpacity onPress={onChangeAddressPress} style={styles.changeButton}>
                     <Text style={{ color: theme.primaryColor, fontWeight: 'bold' }}>Change</Text>
@@ -216,18 +209,18 @@ function Cart() {
                 </Box>
               </View>
             )}
-            <Text style={{ fontSize: 18, marginVertical: 12 }}>
+            <Text style={{color:'black', fontSize: 16, marginVertical: 12 }}>
               Payment Details
             </Text>
             <Card style={styles.paymentDetailsContainer}>
               <View style={styles.detailRow}>
                 <Text style={{color:"black"}}>Total MRP</Text>
-                <Text style={{color:"black"}}>{totalMRP()}</Text>
+                <Text style={{color:"black"}}>₹ {totalMRP()}</Text>
               </View>
 
               <View style={styles.detailRow}>
                 <Text style={{color:"black"}}>Discount on MRP</Text>
-                <Text style={{color:"black"}}>{totalMRP() - discountedPrice()}</Text>
+                <Text style={{color:"black"}}>₹ {totalMRP() - discountedPrice()}</Text>
               </View>
 
               <View style={styles.detailRow}>
@@ -239,7 +232,7 @@ function Cart() {
 
               <View style={styles.detailRow}>
               <Text style={styles.orderTotalText}>Total Amount</Text>
-                <Text style={styles.orderTotalText}>{discountedPrice()}</Text>
+                <Text style={styles.orderTotalText}>₹ {discountedPrice()}</Text>
               </View>
             </Card>
           </>

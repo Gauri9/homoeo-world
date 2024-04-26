@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import {
   Input,
@@ -28,32 +28,38 @@ function Login() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [canLogin, setCanLogin] = useState(true);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isCredentialsWrong, setIsCredentialsWrong] = useState(false);
 
   const handleTogglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
   function checkDisable() {
-    return email.length <= 0 || password.length <= 0;
+    console.log(email.length <= 0 || password.length <= 0 || isCredentialsWrong)
+    return email.length <= 0 || password.length <= 0 || isCredentialsWrong;
   }
   const disable = checkDisable();
 
   const handleEmailInputChange = (value) => {
+    setIsCredentialsWrong(false);
     // Regular expression for validating email addresses
+    const emailID = value.toLowerCase();
+    setEmail(emailID);
+    console.log('email', email)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
     // Check if the input value matches the email format
-    if (emailRegex.test(value)) {
-      setEmail(value);
+    if (emailRegex.test(emailID)) {
+      setEmail(emailID);
       setEmailValid(true);     
     } 
     else {
       setEmailValid(false)
     }
   };
-  
 
   const handlePasswordInputChange = (value) => {
+    setIsCredentialsWrong(false);
     setPassword(value);
     console.log(password);
   };
@@ -73,23 +79,34 @@ function Login() {
     try {
       const creds = { username: email, password: password };
       const response = await api.validateCredentials(creds);
+      console.log('response', response)
 
       //store the token in AsyncStorage
       const token = response.data.token;
 
+      setEmail(""); 
+      setPassword("");
+
       if (token != null) {
         await AsyncStorage.setItem("authToken", JSON.stringify(token));
-        // navigation.navigate("Product List");
         navigation.navigate("Home")
         setIsLoggingIn(false);
         console.log("Authentication is successful");
-      } else console.log("token is null");
+      } 
+      else 
+        console.log("token is null");
 
-      // const storedToken = await AsyncStorage.getItem("authToken");
-      // authToken = JSON.parse(storedToken);
-      // console.log("Stored authToken:", authToken);
-    } catch (error) {
-      console.error("Error logging in user:", error);
+    } 
+    catch (error) {
+      if (error.response && error.response.status === 400) {
+        // Unauthorized error
+        setIsCredentialsWrong(true);
+        setIsLoggingIn(false);
+        console.error('Unauthorized:', error.response.data);
+      } 
+      else{
+        console.error("Error logging in user:", error);
+      }
     }
   };
 
@@ -110,8 +127,9 @@ function Login() {
       {/* Username or Email Input Field */}
       <View style={styles.buttonStyle}>
         <View style={styles.emailInput}>
-          <Text style={styles.inputFieldText}>Email or Username </Text>
+          <Text style={styles.inputFieldText}>Email</Text>
           <Input
+            value={email} 
             InputLeftElement={
               <Image
                 source={require("HomoeoWorld/assets/icons/person.png")}
@@ -120,7 +138,7 @@ function Login() {
               />
             }
             variant="rounded"
-            placeholder="Username or Email"
+            placeholder="Username"
             onChangeText={handleEmailInputChange}
           />
           {!emailValid && <Text style={styles.warningText}>Invalid email format</Text>}
@@ -132,6 +150,7 @@ function Login() {
         <View style={styles.emailInput}>
           <Text style={styles.inputFieldText}>Password</Text>
           <Input
+          value={password}
             InputLeftElement={
               <TouchableOpacity activeOpacity={1} onPress={handleTogglePasswordVisibility}>
                 {!passwordVisible && (
@@ -171,13 +190,16 @@ function Login() {
           {!canLogin && (
             <Text style={{ color: "red" }}>Please enter all the details</Text>
           )}
+          {isCredentialsWrong && (
+            <Text style={{ color: "red" }}>Wrong Credentials</Text>
+          )}
         </View>
       )}
 
       {isLoggingIn && (
         <View style={styles.buttonStyle}>
           <Button isDisabled={true} style={[styles.buttonDesign]}>
-            <HStack space={5} justifyContent="center">
+           <HStack space={5} justifyContent="center">
               <Spinner accessibilityLabel="loading" />
             </HStack>
           </Button>

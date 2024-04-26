@@ -16,6 +16,7 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
+import AutocompleteSearchBar from "../../components/AutoCompleteSearchBar/AutocompleteSearchBar";
 import {theme} from 'C:/Users/Gauri/FULL_STACK/HomoeoWorld/src/utils/theme.js'
 import * as api from "HomoeoWorld/src/utils/api.js";
 import styles from './styles'
@@ -59,6 +60,14 @@ function MedicineNamesList(){
     
     return(
         <View style={styles.container}>
+
+              {/* Search bar */}
+            <View style={{backgroundColor:'white'}}>
+                <AutocompleteSearchBar />
+            </View>
+
+            <View style={styles.seperator}></View>
+
             <FlatList
                 data={namesData}
                 numColumns={1}

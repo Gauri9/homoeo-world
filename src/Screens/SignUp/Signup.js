@@ -20,15 +20,30 @@ function Signup() {
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [canRegister, setCanRegister] = useState(true);
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [emailValid, setEmailValid] = useState(true);
+
 
   function checkDisable(){
-    return email.length<=0 || password.length<=0 || confirmPassword.length<=0 || !passwordsMatch
+    return email.length<=0 || password.length<=0 || confirmPassword.length<=0 || !passwordsMatch || !emailValid;
   }
   const disable = checkDisable();
 
 
   const handleEmailInputChange = (value) => {
-    setEmail(value);
+    // Regular expression for validating email addresses
+    const emailID = value.toLowerCase();
+    setEmail(emailID);
+    console.log('email', email)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Check if the input value matches the email format
+    if (emailRegex.test(emailID)) {
+      setEmail(emailID);
+      setEmailValid(true);     
+    } 
+    else {
+      setEmailValid(false)
+    }
     console.log(email);
   }
 
@@ -83,6 +98,7 @@ function Signup() {
         <View style={styles.emailInput}>
         <Text style={styles.inputFieldText}>Email or Username </Text>
           <Input
+          value={email}
             InputLeftElement={
               <Image source= {require('HomoeoWorld/assets/icons/person.png')} 
               alt="No Image" 
@@ -96,9 +112,9 @@ function Signup() {
             _dark={{
               placeholderTextColor: "blueGray.50",
             }}
-            onChangeText={handleEmailInputChange}
-            value={email}
+            onChangeText={handleEmailInputChange} 
           />
+          {!emailValid && <Text style={{color:"red"}}>Invalid email format</Text>}
         </View>
       </View>
 

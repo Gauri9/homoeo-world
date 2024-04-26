@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // const apiBaseUrl = Config.API_BASE_URL;
 // const apiBaseUrl = 'https://medical-app-5gdu.onrender.com'
-// const apiBaseUrl = 'http://192.168.201.117:5000'
-const apiBaseUrl = 'https://gauri-try.df.r.appspot.com'
+const apiBaseUrl = 'http://192.168.1.3:5000'
+// const apiBaseUrl = 'https://gauri-try.df.r.appspot.com'
 
 export const postCredentials = async (creds) => await axios.post(`${apiBaseUrl}/login`,creds);  //on signup page
 export const validateCredentials = async (creds) => {

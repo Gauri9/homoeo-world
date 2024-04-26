@@ -137,8 +137,9 @@ const ProductDetail = () => {
         <Text style={styles.sectionTitle}>Package:</Text>
         <View style={{flexDirection:'row'}}>
           {Array.from(uniquePackages).map((package_, index) => (
-            <TouchableOpacity key={index} onPress={() => handlePackageChange(package_)} style={[styles.sectionButton, selectedPackage == package_ ? {backgroundColor:theme.primaryColor, opacity:0.5} : null]}>
-              <Text style={styles.package}>
+            <TouchableOpacity key={index} onPress={() => handlePackageChange(package_)} 
+            style={[styles.sectionButton]}>
+              <Text style={[styles.package, selectedPackage == package_ ? {backgroundColor:theme.primaryColor} : null]}>
                 {package_}
               </Text>
             </TouchableOpacity>
@@ -153,8 +154,8 @@ const ProductDetail = () => {
         <Text style={styles.sectionTitle}>Size:</Text>
         <View style={{flexDirection:'row'}}>
           {medicineDetail.subcategories.map((subcategory, index) => (
-            <TouchableOpacity key={index} onPress={() => handleSizeChange(subcategory.Size)} style={[styles.sectionButton, selectedSize==subcategory.Size ? {backgroundColor:theme.primaryColor, opacity:0.5} : null]}>
-              <Text style={styles.size}>
+            <TouchableOpacity key={index} onPress={() => handleSizeChange(subcategory.Size)} style={[styles.sectionButton]}>
+              <Text style={[styles.size, selectedSize==subcategory.Size ? {backgroundColor:theme.primaryColor} : null]}>
                 {subcategory.Size}
               </Text>
             </TouchableOpacity>

@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {NativeBaseProvider, Card, Box, Heading, Divider, Row, Image, Button} from 'native-base';
+import { useNavigation, useRoute } from "@react-navigation/native";
 import * as api from '../../utils/api.js'
 
 import Footer from '../../components/Footer/Footer';
@@ -15,7 +16,9 @@ import {theme} from '../../utils/theme.js'
 
 function Orders() {
   const [selectedOption, setSelectedOption] = useState('delivery');
-  const [ordersData, setOrdersData] = useState([])
+  const [ordersData, setOrdersData] = useState([]);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
      fetchData = async () =>{
@@ -24,30 +27,37 @@ function Orders() {
       console.log('ordersData', ordersData)
     }
     fetchData();
-  }, [])
+  }, []);
+
+  const onOrderPress = (item) => {
+    console.log('onOrderPress...', item._id);
+    navigation.navigate('Order Detail Page',{item})
+  }
+
+  const formatDate = (unformatted_date) => {
+    const date = new Date(unformatted_date);
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    return formattedDate;
+  }
+
 
   
   const renderItem = ({item}) => (
-    <Box
-      bg="white"
-      p={4}
-      borderWidth={1}
-      borderColor="gray.300"
-      borderRadius={8}
+    <TouchableOpacity
       style= {styles.Box}
+      onPress={() => onOrderPress(item)}
     >
-      <Text style={{color:'black', fontWeight:"bold"}}>Order ID: {item._id}</Text>
-      <Divider my={2} />
       <Text style={{color:'black'}}>Cart Total: Rs. {item.order_total}</Text>
       <Text style={{color:"black"}} >Shipping Address: {item.shipping_address}</Text>
-      <Text style={{color:"black"}}>Order Placed: {item.order_timestamp}</Text>
+      <Text style={{color:"black"}}>Order Placed: {formatDate(item.order_timestamp)}</Text>
       {item.order_status === "DELIVERED"  && 
-        <Text>Delivery Date: {item.delivery_date}</Text> 
+        <Text style={{color:"black"}}>Delivery Date: {formatDate(item.delivery_date)}</Text> 
       }
 
       <Divider my={2}/>
       <Text style={{color:'green', fontWeight:'bold'}}>Order Status: {item.order_status}</Text>
-    </Box>
+    </TouchableOpacity>
   )
 
   return (
@@ -126,5 +136,8 @@ const styles = StyleSheet.create({
   Box:{
     margin: '5%',
     padding: '5%',
+    borderColor: 'gray.300',
+    borderWidth: 1,
+    borderRadius: 8
 }
 });

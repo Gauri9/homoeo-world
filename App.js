@@ -54,6 +54,8 @@ function App() {
           <Stack.Screen name="Select Address" component={AddressList}/>
           <Stack.Screen name="Order Placed" component={OrderPlaced} options={{headerShown: false, headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
           <Stack.Screen name="Orders" component={Orders} options={{title: 'Orders', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5}}}/>
+          <Stack.Screen name="Order Detail Page" component={OrderDetailsPage}/>
+
         </Stack.Navigator>
     </CartProvider>
   </NativeBaseProvider>  

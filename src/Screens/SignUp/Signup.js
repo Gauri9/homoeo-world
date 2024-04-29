@@ -21,10 +21,11 @@ function Signup() {
   const [canRegister, setCanRegister] = useState(true);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [emailValid, setEmailValid] = useState(true);
+  const [isValidPassword, setIsValidPassword] = useState(true);
 
 
   function checkDisable(){
-    return email.length<=0 || password.length<=0 || confirmPassword.length<=0 || !passwordsMatch || !emailValid;
+    return email.length<=0 || password.length<=0 || confirmPassword.length<=0 || !passwordsMatch || !emailValid || !isValidPassword;
   }
   const disable = checkDisable();
 
@@ -38,7 +39,6 @@ function Signup() {
   
     // Check if the input value matches the email format
     if (emailRegex.test(emailID)) {
-      setEmail(emailID);
       setEmailValid(true);     
     } 
     else {
@@ -47,8 +47,15 @@ function Signup() {
     console.log(email);
   }
 
-  const handlePasswordInputChange = (value) => {
-    setPassword(value)
+  const handlePasswordInputChange = (pswd) => {
+    setPassword(pswd);
+    if(pswd.length >= 8){
+      setIsValidPassword(true)
+    }
+    else{
+      setIsValidPassword(false);
+    }
+    
     console.log(password);
   }
 
@@ -142,6 +149,7 @@ function Signup() {
             onChangeText={handlePasswordInputChange}
             value={password}
           />
+          {!isValidPassword && <Text style={{color:"red"}}>Very short password, minimum 8 characters required</Text>}
         </View>
       </View>
 

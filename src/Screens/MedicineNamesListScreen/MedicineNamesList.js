@@ -25,6 +25,7 @@ import styles from './styles'
 function MedicineNamesList(){
 
     const [namesData, setNamesData] = useState([]);
+    const [isLoadingData, setIsLoadingData] = useState(false);
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -39,9 +40,11 @@ function MedicineNamesList(){
     useEffect(()=>{
 
         async function fetchData(){
+            setIsLoadingData(true);
             const response = await api.fetchMedicineNames(header);
-            setNamesData(response.data)
-            console.log(namesData)
+            setIsLoadingData(false);
+            setNamesData(response.data);
+            console.log(namesData);
         }
 
         fetchData();
@@ -68,7 +71,12 @@ function MedicineNamesList(){
 
             <View style={styles.seperator}></View>
 
-            <FlatList
+            {isLoadingData ? (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color= {theme.primaryColor} />
+                </View>
+            ) : (
+                <FlatList
                 data={namesData}
                 numColumns={1}
                 keyExtractor={(item)=> item._id}
@@ -81,6 +89,9 @@ function MedicineNamesList(){
                 )}
             
             />
+            )}
+
+            
                 
         </View>
     )

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import {NativeBaseProvider, Button } from 'native-base';
 // import SingleProduct from '../../components/SingleProduct/SingleProduct';
 import Footer from '../../components/Footer/Footer';
@@ -17,6 +17,7 @@ const ProductDetail = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState();
   const [cartDetail, setCartDetail] = useState();
   const [uniquePackages, setUniquePackages] = useState();
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   const {addToCart, incrementQuantity, decrementQuantity, cart} = useCart();
 
@@ -26,9 +27,11 @@ const ProductDetail = () => {
 
   useEffect(() => {
     async function fetchData(){
-      console.log('fetch data----------------')
+      console.log('fetch data----------------');
+      setIsLoadingData(true);
       //api call to fetch medicine details based on medicine name and company
-      const response = await api.fetchMedicineDetail(medicineName) 
+      const response = await api.fetchMedicineDetail(medicineName);
+      setIsLoadingData(false);
       console.log(response)
       setMedicineDetail(response)
     }
@@ -113,8 +116,12 @@ const ProductDetail = () => {
 
   return (
     <>
-    {!medicineDetail && <Text>Loading...</Text>}
-    {medicineDetail!=null && 
+    {isLoadingData && 
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color= {theme.primaryColor} />
+                </View>
+    }
+    {medicineDetail!=null && !isLoadingData && 
     <ScrollView style={styles.container}>
        <View style={styles.detailsContainer}>
         <Text style={styles.title}>{medicineDetail.title}</Text>

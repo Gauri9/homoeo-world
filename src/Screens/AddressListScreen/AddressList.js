@@ -49,7 +49,7 @@ function AddressList() {
     const address = addressString;
 
     //api call to save the address for the current user
-    const response = api.postNewAddress(address);
+    const response = await api.postNewAddress(address);
 
     setAddresses((prevAdresess) =>  [...prevAdresess, address]);
     setSelectedAddress(address);
@@ -71,6 +71,16 @@ function AddressList() {
 
   return (
    <View style={styles.container}>
+    <Radio.Group
+            name="addressRadioGroup"
+            value={selectedAddress}
+            onChange={() => handleAddressSelection("Takeaway")}
+      >
+        <Radio value="Takeaway"  style={styles.radio} size="sm" colorScheme='black'>
+          <Text style={[styles.addressText, selectedAddress == "Takeaway" && styles.selectedAddressText ]}>Takeaway</Text>
+        </Radio>
+    </Radio.Group>
+
     <ScrollView style={styles.addressContainer}>
       <Button onPress={toggleModal} style={styles.button}>+ Add new address</Button>
       {addresses.map((address, index) => (

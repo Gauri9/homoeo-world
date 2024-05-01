@@ -4,7 +4,7 @@ import { Input, Stack, FormControl, Button, Modal } from 'native-base';
 import {theme} from 'HomoeoWorld/src/utils/theme.js' ;
 
 
-const OrderDetailsModal = ({ isVisible, onClose }) => {
+const OrderDetailsModal = ({ isVisible, onConfirm, onCancel }) => {
 
   return (
     <Modal isOpen={isVisible} >
@@ -25,7 +25,8 @@ const OrderDetailsModal = ({ isVisible, onClose }) => {
         </FormControl>
       </Modal.Body>
       <Modal.Footer>
-        <Button onPress={onClose} style={{marginRight:20, backgroundColor: theme.primaryColor }}>Confirm</Button>
+        <Button onPress={onCancel} style={{marginRight:20, backgroundColor: theme.primaryColor }}>Cancel</Button>
+        <Button onPress={onConfirm} style={{marginRight:20, backgroundColor: theme.primaryColor }}>Confirm</Button>
       </Modal.Footer>
     </Modal.Content>
   </Modal>

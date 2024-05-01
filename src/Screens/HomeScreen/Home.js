@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, FlatList, Image, ScrollView, TouchableOpacity } from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import AutocompleteSearchBar from "HomoeoWorld/src/components/AutoCompleteSearchBar/AutocompleteSearchBar.js";
@@ -7,9 +7,22 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import Footer from "../../components/Footer/Footer";
+import * as api from '../../utils/api.js'
 
 
 const HomeScreen = () => {
+
+  const [currentUser, setCurrentUser] = useState();
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const user = await api.getCurrentUser();
+      const {username} =  user;
+      setCurrentUser(username);
+    }
+    fetchCurrentUser();
+  },[currentUser])
+
   // Dummy data for categories
   const categories = [
     { id: 1, name: '3X Dilutions', image: require('C:/Users/Gauri/FULL_STACK/HomoeoWorld/assets/default-medicine.jpg') },
@@ -47,8 +60,14 @@ const HomeScreen = () => {
     navigation.navigate("Medicine Names",{header: item.name})
   }
 
+  
+
   return (
     <ScrollView style={styles.container}>
+
+      {currentUser && <View style = {styles.welcomeContainer}>
+        <Text style={{color:'black', fontSize:20, fontWeight: 20}}>Welcome, {currentUser}</Text>
+      </View>}
 
       {/* Search bar */}
       <View style={{backgroundColor:'white'}}>

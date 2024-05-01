@@ -69,6 +69,13 @@ export default styles = StyleSheet.create({
     padding:20,
     marginTop:10
   },
+  welcomeContainer:{
+    flex:1,
+    flexDirection:'row',
+    backgroundColor:'white',
+    padding:20,
+    marginVertical:10
+  },
   uploadContainer:{
     borderRadius: 10,
     borderColor: theme.primaryColor,

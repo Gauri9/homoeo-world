@@ -39,7 +39,6 @@ function App() {
         <Stack.Navigator>
           {/* working on this screen -- temp*/}
           {/* <Stack.Screen name="Cart" component={Cart} options={{title: 'My Cart', headerStyle: {elevation: 5, shadowColor: 'black', shadowRadius: 5, },}}/> */}
-
           {/* <Stack.Screen name="Order Detail Page" component={OrderDetailsPage}/> */}
           
           {/* <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>

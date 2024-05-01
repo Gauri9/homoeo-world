@@ -23,9 +23,10 @@ function Cart() {
   
 
   useEffect(() => {
-    console.log('cart', cart)
-    // console.log('cart', cart[0].subcategories)
-  },[])
+    console.log('cart[0].subcategories', cart[0].subcategories)
+    console.log('selectedAddress', selectedAddress)
+    console.log(getUserId());
+  },[isAddressSelected])
 
    useEffect(() => {
     async function addressSelection() {
@@ -68,35 +69,56 @@ function Cart() {
     // navigation.navigate("Order Placed");
   };
 
-  const onClose = async () => {
+  const onCancel = async () => {
+    setIsModalVisible(false);
+  }
+
+  const getUserId = async () => {
+    const current_user = await api.getCurrentUser();
+    console.log('current_user', current_user);
+    const {user_id} = current_user;
+    console.log('user_id', user_id);
+
+    return user_id;
+  }
+
+  const getOrderItems = () => {
+
+    var orderItems = [];
+
+    for(let i=0;i<cart.length;i++){
+      for(let j=0;j<cart[i].subcategories.length;j++){
+        const orderItem = {
+          "title": cart[i].title,
+          "company": cart[i].company,
+          "package": cart[i].subcategories[j]["Package"],
+          "size": cart[i].subcategories[j]["Size"],
+          "MRP": cart[i].subcategories[j]["MRP"],
+          "discountedPercentage": cart[i].subcategories[j]["Discounted Percentage"],
+          "quantity": 2
+        }
+        console.log("orderItem",orderItem);
+        orderItems.push(orderItem)
+      }
+      
+    }
+
+    return orderItems;
+  } 
+
+  const onConfirm = async () => {
+    console.log('inside onConfirm');
     setIsModalVisible(false);
       const orderData = {
-        "user_id": "65dd8ffc3f33f89b5111f936",
-        "order_items": [
-            {"title": "testing-2",
-            "company": "SBL",
-            "package": "Tablets",
-            "size": "6x 25g",
-            "MRP": 105,
-            "discountedPercentage": 10,
-            "quantity": 2
-            },
-            {"title": "Calcarea Flurocia 3x",
-            "company": "Schwabe",
-            "package": "Tablets",
-            "size": "6x 50g",
-            "MRP": 105,
-            "discountedPercentage": 10,
-            "quantity": 3
-            }
-        ],
+        "user_id": await getUserId(),
+        "order_items": getOrderItems(),
         "order_status": "PENDING",
-        "shipping_address": "Vishal PG",
-        "order_total": 210,
-        "delivery_date": "2024-03-24",
-        "order_timestamp": "2024-03-17"
+        "shipping_address": selectedAddress,
+        "order_total": calculatecartTotal(),
+        "order_timestamp": (new Date()).toLocaleDateString('en-us', {day:'numeric', month:'long', year:'numeric'})
       };   
-      api.postOrderDetails(orderData)
+    console.log('order data', orderData);
+    api.postOrderDetails(orderData)
     navigation.navigate("Order Placed");
   }
 
@@ -159,7 +181,7 @@ function Cart() {
 
   const calculatecartTotal = () => {
     console.log('calculatecartTotal...')
-    
+    return totalMRP() - discountedPrice();
   }
 
   const totalMRP = () => {
@@ -267,7 +289,7 @@ function Cart() {
         </TouchableOpacity>
       )}
 
-      <OrderDetailsModal isVisible={isModalVisible} onClose={onClose} />
+      <OrderDetailsModal isVisible={isModalVisible} onConfirm={onConfirm} onCancel={onCancel}  />
       {/* <AddressFormModal isVisible={isModalVisible} onSave={handleSaveAddress} onClose={toggleModal} /> */}
 
     </View>

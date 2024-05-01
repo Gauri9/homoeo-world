@@ -1,10 +1,27 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
+
 
 // const apiBaseUrl = Config.API_BASE_URL;
 // const apiBaseUrl = 'https://medical-app-5gdu.onrender.com'
 const apiBaseUrl = 'http://192.168.1.3:5000'
 // const apiBaseUrl = 'https://gauri-try.df.r.appspot.com'
+
+
+//getCurrentUser
+export const getCurrentUser = async () => {
+    console.log('inside getCurrentUser...')
+    const jwtToken = await AsyncStorage.getItem('authToken');
+    const authToken = JSON.parse(jwtToken); 
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
+      };
+
+    const response = await axios.get(`${apiBaseUrl}/login/getcurrentuser`,{headers})
+    return response.data;
+}
 
 export const postCredentials = async (creds) => await axios.post(`${apiBaseUrl}/login`,creds);  //on signup page
 export const validateCredentials = async (creds) => {
@@ -16,6 +33,7 @@ export const validateCredentials = async (creds) => {
 
 //order
 export const postOrderDetails = async (orderDetails) => {
+    console.log('orderData', orderDetails)
     const headers = {
         'Content-Type': 'application/json',
       };
@@ -48,7 +66,7 @@ export const fetchMedicineNames = async (category) => {
             category:category
         }
     })
-    return response
+    return response;
 }
 export const fetchMedicineDetail = async (title) => {
     console.log('fetchMedicineDetail', title)

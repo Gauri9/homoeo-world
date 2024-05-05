@@ -23,14 +23,14 @@ const ProductDetail = () => {
 
   const navigation = useNavigation();
   const route = useRoute();
-  const { medicineName } = route.params;
+  const { medicineName, company } = route.params;
 
   useEffect(() => {
     async function fetchData(){
       console.log('fetch data----------------');
       setIsLoadingData(true);
       //api call to fetch medicine details based on medicine name and company
-      const response = await api.fetchMedicineDetail(medicineName);
+      const response = await api.fetchMedicineDetail(medicineName, company);
       setIsLoadingData(false);
       console.log(response)
       setMedicineDetail(response)

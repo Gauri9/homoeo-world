@@ -5,7 +5,7 @@ import jwt_decode from 'jwt-decode';
 
 // const apiBaseUrl = Config.API_BASE_URL;
 // const apiBaseUrl = 'https://medical-app-5gdu.onrender.com'
-const apiBaseUrl = 'http://192.168.1.3:5000'
+const apiBaseUrl = 'http://192.168.1.17:5000'
 // const apiBaseUrl = 'https://gauri-try.df.r.appspot.com'
 
 
@@ -43,22 +43,22 @@ export const postOrderDetails = async (orderDetails) => {
 export const getOrdersData = async () => await axios.get(`${apiBaseUrl}/order/orderhistory`) 
 
 //product
-export const getProducts = async (page, pageSize) => await axios.get(`${apiBaseUrl}/product/getproducts`, {
-    params: {
-        page: page,
-        pageSize: pageSize,
-    },
-});
+// export const getProducts = async (page, pageSize) => await axios.get(`${apiBaseUrl}/product/getproducts`, {
+//     params: {
+//         page: page,
+//         pageSize: pageSize,
+//     },
+// });
 export const searchProducts = async (searchTerm) => await axios.get(`${apiBaseUrl}/medicine/getsearchresults`, {
     params: {
         searchTerm: searchTerm
     }
 });
-export const getProductByTitle = async (title) => await axios.get(`${apiBaseUrl}/product/getproductbytitle`, {
-    params:{
-        title: title
-    }
-});
+// export const getProductByTitle = async (title) => await axios.get(`${apiBaseUrl}/product/getproductbytitle`, {
+//     params:{
+//         title: title,
+//     }
+// });
 export const fetchMedicineNames = async (category) => {
     console.log('inside fetchMedicineNames api.js')
     const response = await axios.get(`${apiBaseUrl}/medicine/getmedicinenames`,{
@@ -68,12 +68,12 @@ export const fetchMedicineNames = async (category) => {
     })
     return response;
 }
-export const fetchMedicineDetail = async (title) => {
+export const fetchMedicineDetail = async (title, company) => {
     console.log('fetchMedicineDetail', title)
     const response = await axios.get(`${apiBaseUrl}/medicine/getmedicinedetails`,{
         params:{
             title: title,
-            // company: company
+            company: company
         }
     })
     return response.data;

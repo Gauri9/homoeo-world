@@ -26,6 +26,7 @@ function MedicineNamesList(){
 
     const [namesData, setNamesData] = useState([]);
     const [isLoadingData, setIsLoadingData] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('delivery');
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -56,9 +57,9 @@ function MedicineNamesList(){
         });
     },[])
 
-    onMedicineNamePress = (medicineName) => {
+    onMedicineNamePress = (medicineName, company) => {
         console.log('inside onMedicineNamePress...', medicineName)
-        navigation.navigate("Product Details", {medicineName})
+        navigation.navigate("Product Details", {medicineName, company})
     }
     
     return(
@@ -82,17 +83,15 @@ function MedicineNamesList(){
                 keyExtractor={(item)=> item._id}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => (
-                    <TouchableOpacity onPress={() => onMedicineNamePress(item.title)}>
+                    <TouchableOpacity onPress={() => onMedicineNamePress(item.title, item.company)}>
                         <Text style={styles.medicineName}>{item.title}</Text>
+                        <Text style={styles.company}>{item.company}</Text>
                         <View style={styles.seperator}></View>
                     </TouchableOpacity>
                 )}
             
             />
-            )}
-
-            
-                
+            )}             
         </View>
     )
 }
@@ -104,24 +103,3 @@ export default () => {
         </NativeBaseProvider>
     )
 } 
- 
-
-
-// const dummyData =[
-//     {id:1, name: 'Biocombination No. 1'},
-//     {id:2, name: 'Biocombination No. 2'},
-//     {id:3, name: 'Biocombination No. 3'},
-//     {id:4, name: 'Biocombination No. 4'},
-//     {id:5, name: 'Biocombination No. 5'},
-//     {id:6, name: 'Biocombination No. 6'},
-//     {id:7, name: 'Biocombination No. 7'},
-//     {id:8, name: 'Biocombination No. 8'},
-//     {id:9, name: 'Biocombination No. 9'},
-//     {id:10, name: 'Biocombination No. 10'},
-//     {id:11, name: 'Biocombination No. 11'},
-//     {id:12, name: 'Biocombination No. 12'},
-//     {id:13, name: 'Biocombination No. 13'},
-//     {id:14, name: 'Biocombination No. 14'},
-//     {id:15, name: 'Biocombination No. 15'},
-//     {id:16, name: 'Biocombination No. 16'},
-// ]

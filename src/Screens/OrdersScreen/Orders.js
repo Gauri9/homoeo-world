@@ -41,8 +41,6 @@ function Orders() {
     return formattedDate;
   }
 
-
-  
   const renderItem = ({item}) => (
     <TouchableOpacity
       style= {styles.Box}

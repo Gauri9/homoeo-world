@@ -11,7 +11,7 @@ const AutocompleteSearchBar = () => {
 
   const [searchTerm, setSearchTerm] =   ("");
   const [searchResults, setSearchResults] = useState([]);
-  const [product, setProduct] = useState();
+  // const [product, setProduct] = useState();
 
   const handleSearch = async (searchTerm) => {
     console.log(searchTerm)
@@ -30,18 +30,9 @@ const AutocompleteSearchBar = () => {
     }
   };
 
-  const gotoProductDetails = async (title) => {
+  const gotoProductDetails = async (title, company) => {
     console.log("gotoProductDetails");
-
-    // const response = await api.getProductByTitle(title);
-    // const productData = response.data;
-
-    // setProduct(productData);
-    // console.log(product);
-
-    // const product = response.data;
-    // navigation.navigate("Product Details", { product: productData });
-    navigation.navigate("Product Details", {medicineName: title})
+    navigation.navigate("Product Details", {medicineName: title, company: company})
   };
 
   return (
@@ -70,18 +61,19 @@ const AutocompleteSearchBar = () => {
             <>
               <TouchableOpacity
                 key={index}
-                onPress={() => gotoProductDetails(item.title)}
+                onPress={() => gotoProductDetails(item.title, item.company)}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  padding: 10,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#D3D3D3",
-                  // borderBottomColor:theme.primaryColor
+                  marginLeft:12
                 }}
               >
-                <Text>{item.title}</Text>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>{item.title}</Text>
+                  <Text style={styles.companyText}>{item.company}</Text>
+                </View>
               </TouchableOpacity> 
+              <View style={styles.seperator}></View>
             </>
           ))}
         </List>
@@ -94,7 +86,6 @@ export default AutocompleteSearchBar;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
     backgroundColor:'white'
   },
   searchList: {
@@ -103,7 +94,22 @@ const styles = StyleSheet.create({
   searchIcon: {
     marginLeft: 10,
   },
+  titleContainer: {
+    flexDirection: 'column',
+  },
+  titleText: {
+    fontSize: 15, 
+    fontWeight: 'bold', 
+  },
+  companyText: {
+    fontSize: 10, 
+    color: 'gray', 
+  },
+  seperator:{
+    height:1,
+    width:'100%',
+    backgroundColor: '#A9A9A9'
+},
 });
 
-// searchResults
-// [{"title": "Omez 365"}, {"title": "omez"}]
+

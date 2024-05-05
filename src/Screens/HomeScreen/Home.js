@@ -66,7 +66,7 @@ const HomeScreen = () => {
     <ScrollView style={styles.container}>
 
       {currentUser && <View style = {styles.welcomeContainer}>
-        <Text style={{color:'black', fontSize:20, fontWeight: 20}}>Welcome, {currentUser}</Text>
+        <Text style={{color:'black', fontSize:20, fontWeight: 100}}>Welcome, {currentUser}</Text>
       </View>}
 
       {/* Search bar */}

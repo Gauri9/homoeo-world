@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import {NativeBaseProvider, Button } from 'native-base';
 // import SingleProduct from '../../components/SingleProduct/SingleProduct';
-import Footer from '../../components/Footer/Footer';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import styles from './styles';
 import { theme } from '../../utils/theme';
@@ -11,6 +10,7 @@ import { useCart } from "../../Context/CartContext";
 
 
 const ProductDetail = () => {
+
   const [medicineDetail, setMedicineDetail] = useState(null)
   const [selectedPackage, setSelectedPackage] = useState();
   const [selectedSize, setSelectedSize] = useState();
@@ -121,6 +121,7 @@ const ProductDetail = () => {
                     <ActivityIndicator size="large" color= {theme.primaryColor} />
                 </View>
     }
+
     {medicineDetail!=null && !isLoadingData && 
     <ScrollView style={styles.container}>
        <View style={styles.detailsContainer}>
@@ -185,16 +186,17 @@ const ProductDetail = () => {
         }
         
       </View>
-      <View
-        style={{ flexDirection: "row", justifyContent: "center", padding: 20 }}
-      >
-        <Button onPress={handleBuyPress} bordered style={styles.buyNow}>
-          <Text style={{ color: theme.primaryColor }}>Buy Now</Text>
-        </Button>
+    </ScrollView>
+    
+    } 
+    <View style={footerStyles.footer}>
+        <TouchableOpacity onPress={handleBuyPress} style={footerStyles.footerButtonAlt}>
+          <Text style={footerStyles.footerButtonAltText}>Buy Now</Text>
+        </TouchableOpacity>
 
-        {selectedSubcategory && selectedSubcategory.quantity>0 ? (
-            <View style={styles.cartItem}>
+      {selectedSubcategory && selectedSubcategory.quantity>0 ? (
               <View style={styles.quantityContainer}>
+
                 <TouchableOpacity onPress={() => decrementQuantity(cartDetail, selectedSubcategory)} style={styles.quantityButton}>
                   <Text style={styles.buttonText}>-</Text>
                 </TouchableOpacity>
@@ -206,26 +208,64 @@ const ProductDetail = () => {
                 <TouchableOpacity onPress={() => incrementQuantity(cartDetail, selectedSubcategory)} style={styles.quantityButton}>
                   <Text style={styles.buttonText}>+</Text>
                 </TouchableOpacity>
+
               </View>
-            </View>
           ) : (
-          <Button onPress={handleAddToCartPress} style={styles.addtoCart}>
-            <Text style={{ color: "white" }}>Add to Cart</Text>
-          </Button>
+          <TouchableOpacity onPress={handleAddToCartPress} style={footerStyles.footerButton}>
+            <Text style={footerStyles.footerButtonText}>Add to Cart</Text>
+          </TouchableOpacity>
         )}
-      </View>
-    </ScrollView>
-    } 
+    </View>
     </>
   );
 }
 
 
+
+const footerStyles = StyleSheet.create({
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    position: "sticky"
+  },
+  footerButton: {
+    flex: 1,
+    paddingVertical: 15,
+    backgroundColor: theme.primaryColor,
+    padding: 10,
+    alignItems: "center",
+  },
+  footerButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  footerButtonAlt: {
+    flex: 1,
+    paddingVertical: 15,
+    backgroundColor: "white",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor:"white",
+  },
+  footerButtonAltText: {
+    color: theme.primaryColor,
+    fontWeight: "bold",
+  },
+  icon:{
+      height: 16,
+      width: 16
+  }
+});
+
 export default () => {
   return (
     <NativeBaseProvider> 
-        <ProductDetail/>      
+        <ProductDetail />     
     </NativeBaseProvider>
   )
 }
+
+
+// wasnt able to export selectedSubcategory outside ProductDetail component
 
